@@ -101,7 +101,7 @@
             <el-option label="JF" :value="57" />
             <el-option label="ME" :value="58" />
           </el-select>
-          <el-select v-model="query.shop_id" placeholder="店舗" clearable style="width: 100px" class="filter-item">
+          <el-select v-model="query.shop_id" placeholder="店舗" filterable clearable style="width: 100px" class="filter-item">
             <el-option label="全店舗" :value="0" />
             <el-option v-for="item in shops" :key="item.shop_id" :label="item.shop_name" :value="item.shop_id" />
           </el-select>

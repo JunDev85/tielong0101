@@ -645,11 +645,14 @@ class MaintenanceController extends Controller
 
         $maintenance['order_reason'] = $order_reason;
 
+        $customgroup_list = Customer_information::select('customergroup',  'customergroup_code')
+        ->distinct()
+        ->whereNotNull('customergroup_code')
+        ->get();
 
-        // $quotation = DB::table('quotation_files')
-        //     ->where('maintenance_id',$maintenance_id)
-        //     ->get();
-        // $maintenance['quotation_files'] = $quotation; 
+        $maintenance['customgroup_list'] = $customgroup_list;
+
+
         return response($maintenance);
     }
 

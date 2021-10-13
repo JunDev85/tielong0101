@@ -350,25 +350,11 @@ class MaintenanceController extends Controller
     }
 
 
-
-    // public function customCodeSearch(Request $request, $custom_code)
-    // {
-    //     $result = Customer_information::select('customer_code', 'customer_name', 'id', 'TEL', 'FAX', 'customer_alias', 'customergroup', 'customergroup_code')
-    //         ->distinct()
-    //         ->where('customer_code', $custom_code)
-    //         ->get();
-    //     if (Customer_information::select('customer_code', 'customer_name', 'id', 'TEL', 'FAX', 'customer_alias', 'customergroup', 'customergroup_code')
-    //         ->distinct()
-    //         ->where('customer_code', $custom_code)->exists()
-    //     ) {
-    //         return response($result);
-    //     } else return response(0);
-    // }
-
     public function ultimateCustomSearch($maintenance_id, Request $request)
     {
         $result = Customer_information::select('customer_code', 'customer_name', 'id', 'TEL', 'FAX', 'customer_alias', 'customergroup', 'customergroup_code')
-            ->distinct();
+            ->distinct()
+            ->groupBy('customer_code');
         if ($request->input('customer_code')) {
             $result->where('customer_code', 'like', '%' . $request->input('customer_code') . '%');
         }
@@ -431,6 +417,7 @@ class MaintenanceController extends Controller
         $result = Customer_information::select('customergroup')
             ->distinct()
             ->where('customergroup_code', $customergroup_code)
+            ->groupBy('customer_code')
             ->get();
 
         if ($result->isEmpty()) {
@@ -488,6 +475,7 @@ class MaintenanceController extends Controller
         $result = Customer_information::select('customer_code', 'customer_name', 'id', 'TEL', 'FAX', 'customer_alias', 'customergroup', 'customergroup_code')
             ->distinct()
             ->where('customer_code', $custom_code)
+            ->groupBy('customer_code')
             ->get();
         return response($result);
     }
@@ -616,6 +604,7 @@ class MaintenanceController extends Controller
         $quotationcus = Customer_information::select('customer_code', 'customer_name', 'customer_id', 'TEL', 'FAX')
             ->distinct()
             ->where('customer_code', $maintenance['customer_code'])
+            ->groupBy('customer_code')
             ->get();
 
 
@@ -648,6 +637,7 @@ class MaintenanceController extends Controller
         $customgroup_list = Customer_information::select('customergroup',  'customergroup_code')
         ->distinct()
         ->whereNotNull('customergroup_code')
+        ->groupBy('customer_code')
         ->get();
 
         $maintenance['customgroup_list'] = $customgroup_list;

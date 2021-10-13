@@ -16,29 +16,8 @@
         </li>
 
         <li class="pull-right">
-          <el-select v-model="query.progress_id" :multiple="true" placeholder="ステータス" clearable style="width: 350px" class="filter-item" v-on:change="handleFilter()">
-            <el-option label="すべて選択" :value="0" />
-            <el-option label="BM承認待" :value="1" />
-            <el-option label="BM承認" :value="2" />
-            <el-option label="BM差戻し" :value="3" />
-            <el-option label="BM却下" :value="4" />
-            <el-option label="BM保留" :value="5" />
-            <el-option label="受付前" :value="6" />
-            <!-- <el-option label="本部承認" :value="1" /> -->
-            <el-option label="本部差戻し" :value="7" />
-            <el-option label="本部見送り" :value="8" />
-            <el-option label="依頼前" :value="9" />
-            <el-option label="依頼済" :value="10" />
-            <el-option label="見積待ち" :value="11" />
-            <el-option label="入荷待ち" :value="13" />
-            <el-option label="DM承認待ち" :value="14" />
-            <el-option label="稟議中" :value="15" />
-            <el-option label="見積発注済み" :value="16" />
-            <el-option label="訪問待ち" :value="18" />
-            <el-option label="報告待ち" :value="19" />
-            <el-option label="店完了" :value="20" />
-            <el-option label="取完了" :value="21" />
-          </el-select>
+          <ElSelectAll v-model="query.progress_id" clearable filterable multiple collapse-tags :options="mdoptionsList" placeholder="ステータス" class="filter-item"  v-on:change="handleFilter()"/>
+
           <el-select v-model="query.business_category_id" placeholder="業態"  filterable
    clearable style="width: 100px" class="filter-item" @change="getShops" v-on:change="handleFilter()">
             <el-option label="全業態" :value="0" />
@@ -208,12 +187,14 @@ import MaintenanceResource from '@/api/maintenance';
 import ShopResource from '@/api/shop';
 import waves from '@/directive/waves'; // Waves directive
 
+import ElSelectAll from 'el-select-all'
+
 const resource = new MaintenanceResource();
 const shopResource = new ShopResource();
 
 export default {
   name: 'MaintenanceList',
-  components: { Pagination },
+  components: { Pagination, ElSelectAll },
   directives: { waves },
   data() {
     return {
@@ -230,18 +211,37 @@ export default {
         shop_id: null,
       },
       shops: [],
+      mdoptionsList: [
+        { label: 'BM承認待ち', value: 1 },
+        { label: 'BM承認', value: 2  },
+        { label: 'BM差戻し', value: 3  },
+        { label: 'BM却下', value: 4  },
+        { label: 'BM保留', value: 5  },
+        { label: '本部受付前', value: 6  },
+        { label: '本部差戻し', value: 7  },
+        { label: '本部見送り', value: 8  },
+        { label: '依頼確定', value: 9  },
+        { label: '依頼済', value: 10  },
+        { label: '見積待ち', value: 11  },
+        { label: '見積精査中', value: 12  },
+        { label: '入荷待ち', value: 13  },
+        { label: 'DM承認待ち', value: 14  },
+        { label: '稟議中', value: 15  },
+        { label: '見積発注済み', value: 16  },
+        { label: '日程調整中', value: 17  },
+        { label: '訪問待ち', value: 18  },
+        { label: '報告待ち', value: 19  },
+        { label: '店完了', value: 20  },
+        { label: '取完了', value: 21  },
+        { label: '問合せ中', value: 22  },
+      ],
     };
   },
   computed: {
     
   },
   created() {
-    this.getList();
-
-    // var totoalTxt = document.getElementsByClassName('el-pagination__total')[0].textContent;
-    // var split_tt = totoalTxt.split(' ');
-    // totoalTxt = '全' + split_tt[1] + '件';
-    
+    this.getList();   
   },
   mounted() {
 
@@ -249,7 +249,6 @@ export default {
   methods: {
     
    tableRowClassName({row, rowIndex}) {
-    //  console.log(row.order_type_id);
        if(row.is_emergency > 0) {
          return 'custom-warning-row';
        } 
@@ -335,6 +334,17 @@ export default {
     &:hover, &:focus {
       color: #999;
     }
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .app-main .app-container .filter-container .list-inline li {
+    margin: 0px!important;
+    padding-bottom: 10px;
+  }
+  
+  .el-select .filter-item .el-select--medium {
+    width: 385px;
   }
 }
 </style>

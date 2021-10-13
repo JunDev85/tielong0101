@@ -21,7 +21,7 @@
     >
       <span slot="title" ><i class="el-icon-info"></i> {{ reporttitleData }} </span>
             <template  v-if="reportpdfSrc">
-              <iframe style="width: 100%" :src="reportpdfSrc"></iframe>
+              <iframe style="width: 100%; max-height: 50rem; min-height: 30rem;" :src="reportpdfSrc"></iframe>
             </template>          
       <span slot="footer" class="dialog-footer">
         <el-button @click="reportpdfviewVisible = false">閉じる</el-button>

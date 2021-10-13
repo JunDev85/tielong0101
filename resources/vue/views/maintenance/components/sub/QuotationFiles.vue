@@ -34,7 +34,7 @@
     >
       <span slot="title" ><i class="el-icon-info"></i> {{ quotationtitleData }} </span>
         <template  v-if="quotationpdfSrc">
-          <iframe style="width: 100%" :src="quotationpdfSrc"></iframe>
+          <iframe style="width: 100%; max-height: 50rem; min-height: 30rem" :src="quotationpdfSrc"></iframe>
         </template>        
       <span slot="footer" class="dialog-footer">
         <el-button @click="quotationpdfviewVisible = false">閉じる</el-button>

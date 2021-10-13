@@ -34,7 +34,7 @@
     >
       <span slot="title" ><i class="el-icon-info"></i> {{ quotationtitleData }} </span>
         <template v-if="quotationpdfSrc">
-          <pdf :src="quotationpdfSrc"></pdf>
+          <VuePdfApp :pdf="quotationpdfSrc"></pdf>
         </template>
       <span slot="footer" class="dialog-footer">
         <el-button @click="quotationpdfviewVisible = false">閉じる</el-button>
@@ -47,11 +47,12 @@
 <script>
 import MaintenanceResource from '@/api/maintenance';
 import pdf from 'vue-pdf'
+import VuePdfApp from "vue-pdf-app"
 
 const resource = new MaintenanceResource();
 export default {
   components: {
-    pdf
+    pdf, VuePdfApp,
   },
   props: {
     detail: {

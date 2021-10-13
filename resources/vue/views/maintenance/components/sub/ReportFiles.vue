@@ -21,7 +21,7 @@
     >
       <span slot="title" ><i class="el-icon-info"></i> {{ reporttitleData }} </span>
             <template  v-if="reportpdfSrc">
-              <pdf :src="reportpdfSrc" />
+              <VuePdfApp :pdf="reportpdfSrc" />
             </template>
           <!-- <embed
             v-if="reportpdfSrc"
@@ -39,10 +39,11 @@
 
 <script>
 import pdf from 'vue-pdf'
+import VuePdfApp from "vue-pdf-app"
 
 export default {
   components: {
-    pdf
+    pdf, VuePdfApp,
   },
   props: {
     detail: {

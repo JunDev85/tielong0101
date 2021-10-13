@@ -34,7 +34,7 @@
     >
       <span slot="title" ><i class="el-icon-info"></i> {{ quotationtitleData }} </span>
         <template v-if="quotationpdfSrc">
-          <VuePdfApp :pdf="quotationpdfSrc"></pdf>
+          <VuePdfApp :pdf="quotationpdfSrc"></VuePdfApp>
         </template>
       <span slot="footer" class="dialog-footer">
         <el-button @click="quotationpdfviewVisible = false">閉じる</el-button>

@@ -33,9 +33,9 @@
       :modal="false"
     >
       <span slot="title" ><i class="el-icon-info"></i> {{ quotationtitleData }} </span>
-        <template v-if="quotationpdfSrc">
-          <VuePdfApp :pdf="quotationpdfSrc"></VuePdfApp>
-        </template>
+        <template  v-if="quotationpdfSrc">
+          <iframe style="width: 100%" :src="quotationpdfSrc"></iframe>
+        </template>        
       <span slot="footer" class="dialog-footer">
         <el-button @click="quotationpdfviewVisible = false">閉じる</el-button>
       </span>
@@ -73,11 +73,6 @@ export default {
   methods: {
 
     quotationFileView(file_name, fiel_path) {
-      // var split_path = file_path.split('/');
-      // var fileName = split_path[split_path.length - 1];
-      // var actionUrl =  './maintenance/quotationfile/' + fileName;
-      // this.quotationtitleData = fileName;
-      // console.log(actionUrl);
 
       /* s3 file get */
       var actionUrl = './zensho-mainte/quotationfile/' + this.detail.maintenance_id + '/' + file_name;

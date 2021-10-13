@@ -20,16 +20,9 @@
       :modal="false"
     >
       <span slot="title" ><i class="el-icon-info"></i> {{ reporttitleData }} </span>
-            <!-- <template  v-if="reportpdfSrc">
-              <VuePdfApp :pdf="reportpdfSrc" />
-            </template> -->
-          <embed
-            v-if="reportpdfSrc"
-                  type="video/webm"
-                  :src="reportpdfSrc"
-                  width="100%"
-                  style="max-height: 50rem; min-height: 30rem"
-            />
+            <template  v-if="reportpdfSrc">
+              <iframe style="width: 100%" :src="reportpdfSrc"></iframe>
+            </template>          
       <span slot="footer" class="dialog-footer">
         <el-button @click="reportpdfviewVisible = false">閉じる</el-button>
       </span>

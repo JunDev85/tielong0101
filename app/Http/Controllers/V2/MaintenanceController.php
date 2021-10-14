@@ -394,23 +394,22 @@ class MaintenanceController extends Controller
     }
 
 
-    public function big_middleconnect(Request $request, $category_id)
+    public function middle_bigconnect(Request $request, $category_id)
     {
-        $result = Sub_category::select('sub_category_id', 'category_id', 'sub_category_name')
+        $result = Category::select('category_id', 'category_name')
             ->distinct()
             ->where('category_id', $category_id)
             ->get();
 
         if ($result->isEmpty()) {
             $result[0] = array(
-                'sub_category_id' => '',
                 'category_id' => '',
-                'sub_category_name' => '',
+                'category_name' => '',
             );
         }
-        // echo $result;
         return response($result);
     }
+
 
     public function depart_name(Request $request, $customergroup_code)
     {

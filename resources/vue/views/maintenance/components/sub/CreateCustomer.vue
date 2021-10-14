@@ -221,37 +221,6 @@
         </tr>
       </template>
     </table>
-    <!-- <el-table
-      :data="custom"
-      :show-header="true"
-    
-      border
-      style="width: 100%; margin: auto: display: none;"
-    >
-      <el-table-column align="center" prop="id" label="NO"></el-table-column>
-      <el-table-column align="center" prop="customer_code" label="取引先コード"></el-table-column>
-      <el-table-column align="center" prop="customer_name" label="取引先名"></el-table-column>
-      <el-table-column align="center" prop="customer_alias" label="取引先名(カナ)"></el-table-column>
-      <el-table-column align="center" prop="customergroup_code" label="区分コード"></el-table-column>
-      <el-table-column align="center" prop="customergroup" label="区分"></el-table-column>
-      <el-table-column align="center" prop="TEL" label="TEL"></el-table-column>
-      <el-table-column align="center" prop="FAX" label="FAX"></el-table-column>
-      <el-table-column align="center" label="FAX">
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
-      </template>
-      </el-table-column>
-    </el-table> -->
-    <!-- {{this.custom}} -->
-    <!-- <template v-for="item in this.custom">
-
-    </template> -->
   </div>
 </template>
 <style>

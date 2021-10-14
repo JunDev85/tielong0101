@@ -61,24 +61,6 @@
         </tr>
       </template>
     </table>
-    <!-- <el-table :data="detail.maintenance_progress" :show-header="true" border style="width: 100%">
-      <el-table-column align="center" prop="created_at" label="日時" :formatter="formatterDate" width="160px" />
-      <el-table-column align="center" prop="progress_id" label="ステータス" :formatter="formatterProgress" width="100px" />
-      <el-table-column align="center" prop="entered_by.name" label="入力者" width="100px" />
-      <el-table-column align="center" prop="comment" label="コメント" />
-      <el-table-column align="center" label="FAX送信">
-        <el-table-column align="center" prop="faxed_to_client" label="取" width="50px">
-          <template slot-scope="scope">
-            <span>{{ scope.row.faxed_to_client == 1 ? '済' : '' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="center" prop="faxed_to_shop" label="店" width="50px">
-          <template slot-scope="scope">
-            <span>{{ scope.row.faxed_to_shop == 1 ? '済' : '' }}</span>
-          </template>
-        </el-table-column>
-      </el-table-column>
-    </el-table> -->
 
     <el-dialog
       title="【見積書ファイルリスト】"

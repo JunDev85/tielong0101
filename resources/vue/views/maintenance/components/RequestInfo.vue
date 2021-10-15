@@ -199,9 +199,7 @@
             <p class="header-1" style="margin-top: 0; padding: 10px">
               添付ファイル
             </p>
-            <div 
-              v-for="(item, index) in detail.maintenance_images"
-              :key="index"            
+            <div        
               style="
                 text-align: center;
                 padding: 5px;
@@ -210,8 +208,9 @@
                 overflow-y: auto;
               "
             >
-            <template v-if="index == 0">
-              <el-image
+            <span v-for="(item, index) in detail.maintenance_images"
+              :key="index"      >
+              <el-image v-if="index == 0"
                 style="
                   width: 100px;
                   height: 100px;
@@ -221,10 +220,10 @@
                 :src="getsrc(detail.maintenance_images[0].file_name)"
                 :preview-src-list="fileList"
               />
-              <a href="#" style="margin-bottom: 10px; display: block"
+              <a href="#" style="margin-bottom: 10px; display: block" v-if="index == 0"
                 >全体写真</a
               >
-              <el-image
+              <el-image v-if="index == 0"
                 style="
                   width: 100px;
                   height: 100px;
@@ -234,10 +233,10 @@
                 :src="getsrc(detail.maintenance_images[1].file_name)"
                 :preview-src-list="fileList"
               />
-              <a href="#" style="margin-bottom: 10px; display: block"
+              <a href="#" style="margin-bottom: 10px; display: block" v-if="index == 0"
                 >細部写真</a
               >
-              <el-image
+              <el-image v-if="index == 0"
                 style="
                   width: 100px;
                   height: 100px;
@@ -247,12 +246,10 @@
                 :src="getsrc(detail.maintenance_images[2].file_name)"
                 :preview-src-list="fileList"
               />
-              <a href="#" style="margin-bottom: 10px; display: block"
+              <a href="#" style="margin-bottom: 10px; display: block" v-if="index == 0"
                 >型番写真</a
               >
-            </template>
-            <template v-if="index > 2">
-              <el-image
+              <el-image v-if="index > 2"
                 style="
                   width: 100px;
                   height: 100px;
@@ -262,7 +259,7 @@
                 :src="getsrc(detail.maintenance_images[index].file_name)"
                 :preview-src-list="fileList"
               />              
-            </template>
+            </span>
             <!-- <template v-if="index == 2">
               <el-image
                 style="

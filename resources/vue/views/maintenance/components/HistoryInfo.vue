@@ -174,6 +174,9 @@ export default {
     this.getBreakDate();
   },
   methods: {
+      handleClose() {
+    this.$emit('update:dialogEdit', false);
+  },
     filesCnt() {
       var quotation_cnt = 0,
         photo_cnt = 0,

@@ -323,7 +323,7 @@ export default {
     close_createComponent() {
       this.custom = '';
       this.selectedRow = '';
-      document.querySelector('#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(11) > div > div.el-dialog__body > div > div.el-dialog__wrapper').classList.add('close-css');
+      document.querySelector("#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(10) > div > div.el-dialog__body > div > div.el-dialog__wrapper").classList.add('close-css');
     },
     depart_name() {
       if (!this.customergroup_code) {
@@ -411,5 +411,28 @@ export default {
   },
 };
 </script>
+
+<style>
+@keyframes dialog-ffade-in {
+  0% {
+    transform: translate3d(-100%, 0, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+@keyframes dialog-ffade-out {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+    opacity: 0;
+  }
+}
+</style>
 <style lang="scss" scoped>
 </style>

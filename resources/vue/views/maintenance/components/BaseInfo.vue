@@ -37,7 +37,7 @@
             </tr>
             <tr>
               <th>店舗担当</th>
-              <td>{{ userName }}</td>
+              <td>{{ detail.user.name  }}</td>
             </tr>
           </tbody>
         </table>
@@ -45,44 +45,6 @@
     </el-row>
     <el-divider />
     <h3>担当者メール</h3>
-    <!-- <table class="detail-table">
-      <tr>
-        <td></td>
-        <td>名称</td>
-        <td>担当者</td>
-        <td>メール宛先</td>
-        <td>メールCC</td>
-      </tr>
-      <tr>
-        <td>営業部</td>
-        <th>{{ detail.mail_data11[0]['department_name'] ? detail.mail_data11[0]['department_name'] : '' }}</th>
-        <td>{{ detail.mail_data1[0]['name'] }}</td>
-        <td prop="to">
-          <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.to" />
-          </template>
-        </td>
-        <td prop="cc">
-          <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.cc" />
-          </template>
-        </td>
-      </tr>
-      <tr>
-        <th>{{ detail.mail_data11[0]['department_name'] ? detail.mail_data11[0]['department_name'] : '' }}</th>
-        <td>{{ detail.mail_data1[0]['name'] }}</td>
-        <td prop="to">
-          <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.to" />
-          </template>
-        </td>
-        <td prop="cc">
-          <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.cc" />
-          </template>
-        </td>
-      </tr>
-    </table> -->
     <el-table :data="tableData" :show-header="true" border style="width: 100%; margin:auto;">
       <el-table-column align="center" prop="title" class-name="header-1" label="" />
       <el-table-column align="center" prop="name" label="名称" />

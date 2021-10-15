@@ -250,18 +250,6 @@
                 >型番写真</a
               >
             </template>
-            <template v-if="index > 2">
-              <el-image
-                style="
-                  width: 100px;
-                  height: 100px;
-                  display: block;
-                  padding: 10px;
-                "
-                :src="getsrc(this.detail.maintenance_images[i].file_name)"
-                :preview-src-list="fileList"
-              />              
-            </template>
             <!-- <template v-if="index == 2">
               <el-image
                 style="

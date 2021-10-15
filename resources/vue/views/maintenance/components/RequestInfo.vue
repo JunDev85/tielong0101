@@ -523,20 +523,7 @@ export default {
       editVisible: false,
       otherinfo: false,
       visibleflag: true,
-      fileList: [
-        // './maintenance/image/' +
-        //   this.detail.maintenance_id +
-        //   '/' +
-        //   this.detail.maintenance_images[0].file_name,
-        // './maintenance/image/' +
-        //   this.detail.maintenance_id +
-        //   '/' +
-        //   this.detail.maintenance_images[1].file_name,
-        // './maintenance/image/' +
-        //   this.detail.maintenance_id +
-        //   '/' +
-        //   this.detail.maintenance_images[2].file_name,
-      ],
+      fileList: [],
       order_content: [
         '修理をしてほしい',
         '部品を送ってほしい',

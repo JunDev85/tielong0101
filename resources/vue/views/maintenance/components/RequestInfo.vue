@@ -199,7 +199,8 @@
             <p class="header-1" style="margin-top: 0; padding: 10px">
               添付ファイル
             </p>
-            <div
+            <div v-for="(item, index) in this.detail.maintenance_images"
+            :key="index"
               style="
                 text-align: center;
                 padding: 5px;
@@ -208,6 +209,7 @@
                 overflow-y: auto;
               "
             >
+            <template v-if="index == 2">
               <el-image
                 style="
                   width: 100px;
@@ -247,6 +249,19 @@
               <a href="#" style="margin-bottom: 10px; display: block"
                 >型番写真</a
               >
+            </template>
+            <template v-if="index > 2">
+              <el-image
+                style="
+                  width: 100px;
+                  height: 100px;
+                  display: block;
+                  padding: 10px;
+                "
+                :src="getsrc(this.detail.maintenance_images[i].file_name)"
+                :preview-src-list="fileList"
+              />              
+            </template>
             </div>
           </td>
         </tr>
@@ -511,18 +526,18 @@ export default {
       otherinfo: false,
       visibleflag: true,
       fileList: [
-        './maintenance/image/' +
-          this.detail.maintenance_id +
-          '/' +
-          this.detail.maintenance_images[0].file_name,
-        './maintenance/image/' +
-          this.detail.maintenance_id +
-          '/' +
-          this.detail.maintenance_images[1].file_name,
-        './maintenance/image/' +
-          this.detail.maintenance_id +
-          '/' +
-          this.detail.maintenance_images[2].file_name,
+        // './maintenance/image/' +
+        //   this.detail.maintenance_id +
+        //   '/' +
+        //   this.detail.maintenance_images[0].file_name,
+        // './maintenance/image/' +
+        //   this.detail.maintenance_id +
+        //   '/' +
+        //   this.detail.maintenance_images[1].file_name,
+        // './maintenance/image/' +
+        //   this.detail.maintenance_id +
+        //   '/' +
+        //   this.detail.maintenance_images[2].file_name,
       ],
       order_content: [
         '修理をしてほしい',
@@ -547,6 +562,9 @@ export default {
     });
 
     this.orderText();
+
+    this.imagesListCal();
+
   },
   created() {
     // this.getImageone();
@@ -563,6 +581,13 @@ export default {
       }
       return text;
     },
+
+    imagesListCal() {
+      for(var i = 0; i < this.detail.maintenance_images.length; i ++) {
+        this.fileList.push('./maintenance/image/' + this.detail.maintenance_id + '/' + this.detail.maintenance_images[i].file_name);   
+      }
+    },
+
     orderText() {
       if (
         this.detail.order_type.order_type_id < 4 &&

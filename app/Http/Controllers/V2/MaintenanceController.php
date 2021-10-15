@@ -32,6 +32,7 @@ use App\Role;
 use App\Shop;
 use App\User;
 use App\Sub_category;
+use App\Category;
 use DB;
 use Log;
 use Validator;

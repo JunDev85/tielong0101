@@ -199,7 +199,8 @@
             <p class="header-1" style="margin-top: 0; padding: 10px">
               添付ファイル
             </p>
-            <div 
+            <div v-for="(item, index) in detail.maintenance_images"
+            :key="index"
               style="
                 text-align: center;
                 padding: 5px;

@@ -251,7 +251,7 @@
                 >型番写真</a
               >
             </template>
-            <template v-if="index > 2">
+            <!-- <template v-if="index > 2">
               <el-image
                 style="
                   width: 100px;
@@ -262,7 +262,7 @@
                 :src="getsrc(detail.maintenance_images[i].file_name)"
                 :preview-src-list="fileList"
               />              
-            </template>
+            </template> -->
             <!-- <template v-if="index == 2">
               <el-image
                 style="

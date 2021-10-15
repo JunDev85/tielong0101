@@ -212,7 +212,6 @@ export default {
       },
       shops: [],
       mdoptionsList: [
-        { label: 'BM承認待ち', value:"all", key: 0 },
         { label: 'BM承認待ち', value: 1 },
         { label: 'BM承認', value: 2  },
         { label: 'BM差戻し', value: 3  },

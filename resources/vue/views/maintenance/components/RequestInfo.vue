@@ -199,7 +199,7 @@
             <p class="header-1" style="margin-top: 0; padding: 10px">
               添付ファイル
             </p>
-            <div v-for="(item, index) in this.detail.maintenance_images"
+            <div v-for="(item, index) in detail.maintenance_images"
             :key="index"
               style="
                 text-align: center;
@@ -210,6 +210,59 @@
               "
             >
             <template v-if="index == 2">
+              <el-image
+                style="
+                  width: 100px;
+                  height: 100px;
+                  display: block;
+                  padding: 10px;
+                "
+                :src="getsrc(item[0].file_name)"
+                :preview-src-list="fileList"
+              />
+              <a href="#" style="margin-bottom: 10px; display: block"
+                >全体写真</a
+              >
+              <el-image
+                style="
+                  width: 100px;
+                  height: 100px;
+                  display: block;
+                  padding: 10px;
+                "
+                :src="getsrc(item[1].file_name)"
+                :preview-src-list="fileList"
+              />
+              <a href="#" style="margin-bottom: 10px; display: block"
+                >細部写真</a
+              >
+              <el-image
+                style="
+                  width: 100px;
+                  height: 100px;
+                  display: block;
+                  padding: 10px;
+                "
+                :src="getsrc(item[2].file_name)"
+                :preview-src-list="fileList"
+              />
+              <a href="#" style="margin-bottom: 10px; display: block"
+                >型番写真</a
+              >
+            </template>
+            <template v-if="index > 2">
+              <el-image
+                style="
+                  width: 100px;
+                  height: 100px;
+                  display: block;
+                  padding: 10px;
+                "
+                :src="getsrc(this.detail.maintenance_images[i].file_name)"
+                :preview-src-list="fileList"
+              />              
+            </template>
+            <!-- <template v-if="index == 2">
               <el-image
                 style="
                   width: 100px;
@@ -261,7 +314,7 @@
                 :src="getsrc(this.detail.maintenance_images[i].file_name)"
                 :preview-src-list="fileList"
               />              
-            </template>
+            </template> -->
             </div>
           </td>
         </tr>

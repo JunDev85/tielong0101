@@ -174,7 +174,14 @@ export const asyncRoutes = [{
             meta: { title: 'icons', icon: 'el-icon-info', noCache: true },
         }, ],
     },
-
+    {
+        path: '/external-link',
+        component: Layout,
+        children: [{
+            path: 'https://github.com/tuandm/laravue',
+            meta: { title: 'ログアウト', icon: 'left-arrow' },
+        }, ],
+    },
     { path: '*', redirect: '/404', hidden: true },
 ];
 

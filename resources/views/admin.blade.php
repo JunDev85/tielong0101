@@ -45,6 +45,7 @@
             top: 20px;
             right: 50px;
             color: red;
+            display: none;
         }
 
         .material-icons {
@@ -54,6 +55,7 @@
         @media screen and (max-width: 520px) {
             .logout-class {
                 right: 10px;
+                display: none;
             }
 
             .material-icons {

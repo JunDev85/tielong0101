@@ -235,10 +235,12 @@ export default {
       if(div_edit) {
         div_edit.classList.add('close-css');
       }
+      // document.querySelector('body').classList.remove('el-popup-parent--hidden');
       var div_modal = document.getElementsByClassName('v-modal');
       if(div_modal[0]) {
         div_modal[0].classList.remove('v-modal');
-      }  
+        // document.querySelector("body").classList.remove('el-popup-parent--hidden');
+      }   
     },
     save() {
       this.$refs.uploadReport.submit();

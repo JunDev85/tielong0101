@@ -15,7 +15,7 @@
             <tr>
               <th>大分類*</th>
               <td class="select-td">
-                <el-select v-model="big_ca" size="small" placeholder="" filterable clearable style="width: 100%" class="filter-item" >
+                <el-select v-model="big_ca" size="small" placeholder="" filterable clearable style="width: 100%" class="filter-item" v-on:change="big_middleconnect()">
                   <el-option v-for="item in categories" :key="item.category_id" :label="item.category_name" :value="item.category_id" />
                 </el-select>
               </td>
@@ -24,7 +24,7 @@
               <th>中分類*</th>
               <td class="select-td">
                 <el-select v-model="mid_ca" size="small" placeholder="" filterable clearable style="width: 100%" class="filter-item" v-on:change="middle_bigconnect()">
-                  <el-option v-for="item in subCategories" :key="item.sub_category_id" :label="item.sub_category_name" :value="item.sub_category_id" />
+                  <el-option v-for="item in subCategories" :key="item.sub_category_id" :label="item.sub_category_name" :value="item.category_id" />
                 </el-select>
               </td>
             </tr>
@@ -265,6 +265,18 @@ export default {
       this.$route.params['selectedRow'] = 0;      
       this.createCustomerVisible = true;
       document.querySelector('#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(11) > div > div.el-dialog__body > div > div.el-dialog__wrapper').classList.remove('close-css');
+    },
+
+
+    big_middleconnect () {
+            if(!this.big_ca) {
+              this.mid_ca = '';
+              return;
+            }
+            maintenanceResource.big_middleconnect(this.big_ca).then(res =>{
+                this.subCategories = res;
+                this.mid_ca = '';
+            }); 
     },
 
     middle_bigconnect () {

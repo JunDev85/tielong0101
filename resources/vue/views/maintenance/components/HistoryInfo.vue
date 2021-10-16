@@ -199,7 +199,7 @@ export default {
           '#app > div > div.main-container > section > div > div.el-row > div:nth-child(2) > div > div.el-card__body > div:nth-child(6)'
         )
         .classList.remove('close-css');
-      var div_modal = document.querySelector('body > div:nth-child(6)');
+      var div_modal = document.querySelector("body > div:nth-child(8)");
       if (div_modal) {
         div_modal.classList.add('v-modal');
       }

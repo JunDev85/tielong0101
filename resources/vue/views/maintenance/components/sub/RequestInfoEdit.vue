@@ -273,7 +273,7 @@ export default {
         return;
       }
       maintenanceResource.middle_bigconnect(this.mid_ca).then(res =>{
-          this.categories = res;
+          // this.categories = res;
           this.big_ca = res[0].category_name;
       }); 
     },

@@ -193,6 +193,7 @@
         </tr>
       </tbody>
     </table>
+    <transition name="ffade">
     <el-dialog
       title="【取引先検索】"
       :visible.sync="createCustomerVisible"
@@ -207,6 +208,7 @@
         <!-- <el-button @click="createCustomerVisible = false">閉じる</el-button> -->
       </span> 
     </el-dialog>    
+    </transition>  
   </div>
 </template>
 
@@ -264,7 +266,7 @@ export default {
       this.$route.params['custom_tableData'] = '';
       this.$route.params['selectedRow'] = 0;      
       this.createCustomerVisible = true;
-      document.querySelector('#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(11) > div > div.el-dialog__body > div > div.el-dialog__wrapper').classList.remove('close-css');
+      document.querySelector("#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(10) > div > div.el-dialog__body > div > div.el-dialog__wrapper").classList.remove('close-css');    
     },
 
 
@@ -312,10 +314,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-@keyframes dialog-fade-in {
+<style>
+@keyframes dialog-ffade-in {
   0% {
-    transform: translate3d(100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
     opacity: 0;
   }
   100% {
@@ -323,7 +325,7 @@ export default {
     opacity: 1;
   }
 }
-@keyframes dialog-fade-out {
+@keyframes dialog-ffade-out {
   0% {
     transform: translate3d(0, 0, 0);
     opacity: 1;

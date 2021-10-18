@@ -24,7 +24,7 @@
               <th>中分類*</th>
               <td class="select-td">
                 <el-select v-model="mid_ca" size="small" placeholder="" filterable clearable style="width: 100%" class="filter-item" v-on:change="middle_bigconnect()">
-                  <el-option v-for="item in subCategories" :key="item.sub_category_id" :label="item.sub_category_name" :value="item.category_id" />
+                  <el-option v-for="item in subCategories" :key="item.sub_category_id" :label="item.sub_category_name" :value="item.sub_category_id" />
                 </el-select>
               </td>
             </tr>
@@ -271,14 +271,17 @@ export default {
 
 
     big_middleconnect () {
-            if(!this.big_ca) {
-              this.mid_ca = '';
-              return;
-            }
-            maintenanceResource.big_middleconnect(this.big_ca).then(res =>{
-                this.subCategories = res;
-                this.mid_ca = '';
-            }); 
+      var big_caVariable;
+      if(!this.big_ca) {
+        this.mid_ca = '';
+        big_caVariable = 0;
+      } else {
+        big_caVariable = this.big_ca;
+      }
+      maintenanceResource.big_middleconnect(big_caVariable).then(res =>{
+          this.subCategories = res;
+          this.mid_ca = '';
+      }); 
     },
 
     middle_bigconnect () {

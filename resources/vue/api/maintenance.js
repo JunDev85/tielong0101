@@ -107,6 +107,14 @@ class MaintenanceResource extends Resource {
         });
     }
 
+    deleteQuotationId(id, data) {
+        return request({
+            url: this.baseUrl + this.uri + '/' + id + '/deleteQuotationId',
+            method: 'post',
+            data: data,
+        });
+    }
+
     depart_name(id) {
         return request({
             url: this.baseUrl + this.uri + '/' + id + '/depart_name',

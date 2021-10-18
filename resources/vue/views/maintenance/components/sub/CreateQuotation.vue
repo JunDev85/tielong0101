@@ -185,49 +185,13 @@
         label="入力者"
         width="100"
       />
+      <el-table-column align="center" label="削除">
+        <template slot-scope="scope">
+            <el-button size="small" type="primary" @click="deleteQuotationId(scope.row.quotation_info_id)" style="    background-color: transparent;
+    border: 0px;"><i class="material-icons" style="font-size:48px;color:red">&#xe92b;</i></el-button>
+        </template>
+      </el-table-column>
     </el-table>
-    <!-- <el-table
-      :data="detail.quotation_info"
-      :show-header="true"
-      border
-      style="width: 100%; margin: auto"
-    >
-      <el-table-column align="center" prop="date" label="日時">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.date" placeholder="" />
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="amount" label="金額">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.amount" placeholder="" />
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="comment" label="摘要">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.comment" placeholder="" />
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="quotation_files_cnt" label="見積書">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.quotation_files_cnt" placeholder="" />
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="photo_files_cnt" label="写真">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.photo_fielse_cnt" placeholder="" />
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="report_files_cnt" label="報告書">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.report_files_cnt" placeholder="" />
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="editor" label="入力者">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.editor" placeholder="" />
-        </template>
-      </el-table-column>
-    </el-table> -->
   </div>
 </template>
 <style>
@@ -282,16 +246,20 @@ export default {
     
   },
   methods: {
+    deleteQuotationId(id){
+      var data = {
+        maintenance_id: this.detail.maintenance_id,
+      }
+      // alert(id);
+      resource.deleteQuotationId(id, data).then((res) => {
+        this.detail.quotation_info = res;
+      });
+    },
     handleClose(){
       var div_create = document.querySelector("#app > div > div.main-container > section > div > div.el-dialog__wrapper.slide-dialog-wrapper > div > div.el-dialog__body > div > div:nth-child(1) > div.el-dialog__wrapper.slide-dialog-wrapper");
       if(div_create) {
         div_create.classList.add('close-css');
       }
-      // document.querySelector('body').classList.remove('el-popup-parent--hidden');
-      // var div_modal = document.querySelector('body > div:nth-child(6)');
-      // if(div_modal) {
-      //   div_modal.classList.remove('v-modal');
-      // }  
     },
     filesCnt() {
       var quotation_cnt = 0,
@@ -331,13 +299,6 @@ export default {
         .createQuotation(this.detail.maintenance_id, insertData)
         .then((res) => {
           this.detail.quotation_info = res;
-          // this.detail.progress_id = this.progressId;
-          // this.detail.progress = {
-          //   progress_id: this.progressId,
-          //   status: this.progress[this.progressId],
-          //   // updated_at: this.detail.maintenance_id,
-          // };
-
           this.comment = '';
           this.faxedToClient = false;
           this.faxedToShop = false;

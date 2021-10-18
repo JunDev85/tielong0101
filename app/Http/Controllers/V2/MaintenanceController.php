@@ -395,6 +395,15 @@ class MaintenanceController extends Controller
     }
 
 
+    public  function deleteQuotationId(Request $request, $quotation_info_id)
+    {
+        Quotation_info::where('quotation_info_id', $quotation_info_id)->delete();
+
+        $result = Quotation_info::where('maintenance_id', $request->input('maintenance_id'))->get();
+
+        return response($result);
+    }
+    
     public function middle_bigconnect(Request $request, $sub_category_id)
     {
         $category_ids = Sub_category::select('category_id')

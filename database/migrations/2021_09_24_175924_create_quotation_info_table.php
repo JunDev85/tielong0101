@@ -19,6 +19,7 @@ class CreateQuotationInfoTable extends Migration
 			$table->bigIncrements('quotation_info_id');
 			$table->unsignedBigInteger('maintenance_id');
             $table->foreign('maintenance_id')->references('maintenance_id')->on('maintenances');
+            $table->string('kind', 100);
             $table->string('amount', 30);
             $table->text('comment');
             $table->tinyInteger('quotation_files_cnt');

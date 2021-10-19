@@ -467,7 +467,16 @@ class MaintenanceController extends Controller
         return response($result);
     }
 
-
+    public function customsList(Request $request) {
+        $customerNC = Customer_information::select('customer_name', 'customer_code')
+                        ->groupBy('customer_code')
+                        ->get();
+        
+        foreach ($customerNC as $key => $value) {
+            $result[$value['customer_code']] = $value['customer_name'];
+        }
+        return response($result);
+    }
 
     public function selectreason(Request $request, $maintenance_id)
     {

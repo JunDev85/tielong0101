@@ -26,10 +26,7 @@
           <span>{{ '' }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" class-name="history-td" label="取引先名">
-        <template slot-scope="scope">
-          <span>{{ '' }}</span>
-        </template>
+      <el-table-column align="center" class-name="history-td" prop="customer_code" :formatter="formatterName" label="取引先名">
       </el-table-column>
       <el-table-column align="center" class-name="history-td" label="依頼内容">
         <template slot-scope="scope">
@@ -77,12 +74,25 @@ export default {
         limit: 8,
         shop_id: this.shopId,
       },
+      customs: [],
     };
   },
   created() {
+    this.customsList();
     this.getList();
   },
   methods: {
+    formatterName(row, column) {
+      if(row.customer_code == '') return;
+      else {
+        return this.customs[row.customer_code];
+      }
+    },
+    async customsList() {
+      resource.customsList().then((res) => {
+        this.customs = res;
+      });
+    },
     async getList() {
       const { limit, page } = this.query;
       this.loading = true;

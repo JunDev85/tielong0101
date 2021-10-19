@@ -47,6 +47,26 @@
         <table class="detail-table">
           <tbody>
             <tr>
+              <th>種類</th>
+              <td class="input-td">
+                <el-select v-model="kind" placeholder="種類"  filterable
+                  clearable  class="filter-item">
+                    <el-option label="事前見積" :value="1" />
+                    <el-option label="修正見積" :value="2" />
+                    <el-option label="提案見積" :value="3" />
+                    <el-option label="事後見積" :value="4" />
+                </el-select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </el-col>
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="10">
+        <table class="detail-table">
+          <tbody>
+            <tr>
               <th>金額</th>
               <td class="input-td">
                 <currency-input
@@ -128,32 +148,6 @@
         </table>
       </el-col>
     </el-row>
-    <el-row :gutter="20">
-      <el-col :span="15">
-        <table class="detail-table">
-          <tbody>
-            <tr>
-              <th>報告書</th>
-              <td style="border: none; padding: 0 5px">
-                <el-upload
-                  ref="uploadReport"
-                  :action="
-                    '/api/v2/maintenance/upload/report/' + detail.maintenance_id
-                  "
-                  :auto-upload="false"
-                  :multiple="false"
-                  :on-success="getUploadFiles()"
-                >
-                  <el-button slot="trigger" size="small" type="info"
-                    >ファイル選択</el-button
-                  >
-                </el-upload>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </el-col>
-    </el-row>
     <div style="text-align: right">
       <el-button type="primary" size="small" @click="save()">登録</el-button>
       <el-button type="default" size="small" @click="handleClose()">閉じる</el-button>
@@ -178,7 +172,6 @@
         label="見積書"
       />
       <el-table-column align="center" prop="photo_files_cnt" label="写真" />
-      <el-table-column align="center" prop="report_files_cnt" label="報告書" />
       <el-table-column
         align="center"
         prop="editor"
@@ -228,12 +221,13 @@ export default {
   },
   data() {
     return {
+      kind: '',
+      quotationKind: [],
       userName: '',
       comment: '',
       date: '',
       amount: '',
       q_cnt: 0,
-      r_cnt: 0,
       p_cnt: 0,
     };
   },
@@ -241,6 +235,12 @@ export default {
     this.$store.dispatch('user/getInfo').then((user) => {
       this.userName = user.name;
     });
+    this.quotationKind = {
+      1: '事前見積',
+      2: '修正見積',
+      3: '提案見積',
+      4: '事後見積',
+    };    
   },
   mounted() {
     
@@ -263,17 +263,14 @@ export default {
     },
     filesCnt() {
       var quotation_cnt = 0,
-        photo_cnt = 0,
-        report_cnt = 0;
+        photo_cnt = 0;
       this.detail.uploading_files.forEach((el) => {
         if (el.kind == 'quotation') quotation_cnt++;
         if (el.kind == 'photo') photo_cnt++;
-        if (el.kind == 'report') report_cnt++;
       });
 
       this.$route.params['q_cnt'] = quotation_cnt;
       this.$route.params['p_cnt'] = photo_cnt;
-      this.$route.params['r_cnt'] = report_cnt;
     },
 
     formatterCurrency(row, column) {
@@ -283,15 +280,14 @@ export default {
 
     save() {
 
-      this.$refs.uploadReport.submit();
       this.$refs.uploadPhoto.submit();
       this.$refs.uploadQuotation.submit();
       const insertData = {
         date: DateTime.fromISO(this.date).toFormat('yyyy-MM-dd hh:mm'),
+        kind: this.kind,
         comment: this.comment,
         amount: this.amount,
         quotation_files_cnt: this.$route.params['q_cnt'],
-        report_files_cnt: this.$route.params['r_cnt'],
         photo_files_cnt: this.$route.params['p_cnt'],
         editor: this.userName,
       };
@@ -300,6 +296,8 @@ export default {
         .then((res) => {
           this.detail.quotation_info = res;
           this.comment = '';
+          this.kind = '';
+          this.amount = '';
           this.faxedToClient = false;
           this.faxedToShop = false;
           this.$emit('create');

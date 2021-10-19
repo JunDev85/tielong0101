@@ -172,18 +172,14 @@ class MaintenanceController extends Controller
         $row = new Quotation_info();
         $row->maintenance_id = $maintenance_id;
         $row->date = $request->input('date');
+        $row->kind = $request->input("kind");
         $row->comment = $request->input('comment');
         $row->amount = $request->input('amount');
         $row->photo_files_cnt = $request->input('photo_files_cnt');
-        $row->report_files_cnt = $request->input('report_files_cnt');
         $row->quotation_files_cnt = $request->input('quotation_files_cnt');
         $row->editor = $request->input('editor');
-        // $row->entered_by = $request->user()->user_id;
         $row->save();
 
-        // $maintenance = Maintenance::find($maintenance_id);
-        // $maintenance->progress_id = $row->progress_id;
-        // $maintenance->save();
 
         $quotation_info = Quotation_info::where('maintenance_id', $maintenance_id)->get();
         return response($quotation_info);

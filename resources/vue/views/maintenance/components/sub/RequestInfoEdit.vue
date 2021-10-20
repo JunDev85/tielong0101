@@ -234,6 +234,7 @@ export default {
   },
   data() {
     return {
+      createdialogWidth: '43%',
       show: false,
       row_id:'',
       custom: null,
@@ -329,7 +330,7 @@ export default {
   .slide-enter {
     transform: translate(100%, 0);
   }
-  
+
   .slide-leave-to {
     transform: translate( 100%, 0);
   }

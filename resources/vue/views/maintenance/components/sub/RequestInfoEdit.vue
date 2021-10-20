@@ -322,9 +322,12 @@ export default {
 </script>
 
 <style>
-  .slide-leave-active,
   .slide-enter-active {
-    transition: 1s;
+    transition: 0.5s;
+  }
+
+  .slide-leave-active {
+    transition: 0.8s;
   }
 
   .slide-enter {

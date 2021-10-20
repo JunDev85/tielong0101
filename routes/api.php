@@ -82,6 +82,7 @@ Route::group(['namespace' => 'V2'], function () {
 
     Route::any('v2/maintenance/class_history', 'MaintenanceController@classHistory'); // メンテナンス一覧
     Route::any('v2/maintenance/shop_history', 'MaintenanceController@shopHistory'); // メンテナンス一覧
+    Route::get('v2/maintenance/customsList', 'MaintenanceController@customsList'); 
 
     Route::post('v2/maintenance/{mantenance_id}/progress/create', 'MaintenanceController@createProgress');
 

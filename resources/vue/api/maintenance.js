@@ -22,6 +22,13 @@ class MaintenanceResource extends Resource {
         });
     }
 
+    customsList() {
+        return request({
+            url: this.baseUrl + this.uri + '/customsList',
+            method: 'get'
+        });
+    }
+
     createProgress(id, insertData) {
         return request({
             url: this.baseUrl + this.uri + '/' + id + '/progress/create',

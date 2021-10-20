@@ -36,9 +36,6 @@
               <th>依頼区分*</th>
               <td>
                 {{detail.order_type.type}}
-                <!-- <el-select v-model="data.order_type_id" size="small" placeholder="" clearable style="width: 100%" class="filter-item">
-                  <el-option v-for="item in orderTypes" :key="item.order_type_id" :label="item.type" :value="item.order_type_id" />
-                </el-select> -->
               </td>
             </tr>
           </tbody>
@@ -193,22 +190,28 @@
         </tr>
       </tbody>
     </table>
-    <transition name="ffade">
-    <el-dialog
-      title="【取引先検索】"
-      :visible.sync="createCustomerVisible"
-      width="43%"
-      custom-class="slide-dialog"
-      top="0px"
-      :modal="false"
-    >
-      <create-customer :detail="detail" :selectedRow="custom"/>
-      <span slot="footer" class="dialog-footer">
-        <!-- <el-button type="primary" @click="createAccounting = false">登録</el-button> -->
-        <!-- <el-button @click="createCustomerVisible = false">閉じる</el-button> -->
-      </span> 
-    </el-dialog>    
-    </transition>  
+
+      <button v-on:click="show = !show" id="createcustomerVisible" style="display: none">
+        ToggleCreateCustomer
+      </button>
+
+    <transition name="slide">
+
+      <template v-if="show">
+        <el-dialog
+          title="【取引先検索】"
+          :visible.sync="show"
+          :width="createdialogWidth"
+          custom-class="slide-dialog"
+          top="0px"
+          :modal="false"
+        >
+          <create-customer :detail="detail" :selectedRow="custom"/>
+
+          <span slot="footer" class="dialog-footer"></span> 
+        </el-dialog>
+      </template>
+   </transition>  
   </div>
 </template>
 
@@ -231,6 +234,7 @@ export default {
   },
   data() {
     return {
+      show: false,
       row_id:'',
       custom: null,
       custom_data: [],
@@ -259,14 +263,13 @@ export default {
   created() {
     this.data_re = JSON.parse(JSON.stringify(this.detail));
     this.getList();
-    // this.$route.params.set('name', 'john');
   },
   methods: {
     createCustomerVisibleSetting() {
       this.$route.params['custom_tableData'] = '';
       this.$route.params['selectedRow'] = 0;      
       this.createCustomerVisible = true;
-      document.querySelector("#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(11) > div > div.el-dialog__body > div > div.el-dialog__wrapper").classList.remove('close-css');    
+      document.getElementById('createcustomerVisible').click();   
     },
 
 
@@ -318,24 +321,16 @@ export default {
 </script>
 
 <style>
-@keyframes dialog-ffade-in {
-  0% {
-    transform: translate3d(-100%, 0, 0);
-    opacity: 0;
+  .slide-leave-active,
+  .slide-enter-active {
+    transition: 1s;
   }
-  100% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
+
+  .slide-enter {
+    transform: translate(100%, 0);
   }
-}
-@keyframes dialog-ffade-out {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
+  
+  .slide-leave-to {
+    transform: translate( 100%, 0);
   }
-  100% {
-    transform: translate3d(100%, 0, 0);
-    opacity: 0;
-  }
-}
 </style>

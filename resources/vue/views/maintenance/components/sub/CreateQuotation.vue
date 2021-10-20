@@ -262,10 +262,7 @@ export default {
       }
     },
     handleClose(){
-      var div_create = document.querySelector("#app > div > div.main-container > section > div > div.el-dialog__wrapper.slide-dialog-wrapper > div > div.el-dialog__body > div > div:nth-child(1) > div.el-dialog__wrapper.slide-dialog-wrapper");
-      if(div_create) {
-        div_create.classList.add('close-css');
-      }
+      document.querySelector("#app > div > div.main-container > section > div > div.el-dialog__wrapper.slide-dialog-wrapper > div > div.el-dialog__body > div > div:nth-child(1) > div.el-dialog__wrapper.slide-dialog-wrapper").click();
     },
     filesCnt() {
       var quotation_cnt = 0,

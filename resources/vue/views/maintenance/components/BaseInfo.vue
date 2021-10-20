@@ -82,54 +82,46 @@
     <div style="text-align:right;margin-top:10px;">
       <el-button type="primary" size="small" @click="createNotesShow()">特記編集</el-button>
     </div>
-    <!-- <transition name="notetransition">
-      <template v-if="createNotesVisible"> -->
-    <el-dialog
-      title="【特記情報 編集】"
-      :visible.sync="createNotesVisible"
-      width="43%"
-      custom-class="slide-dialog"
-      top="0px"
-      :modal="false"
-    >
+    <button v-on:click="show = !show" id="createnotesVisible" style="display: none">
+      ToggleCreateNotes
+    </button>
 
-        <CreateNotes :detail="detail"/>
+    <transition name="slideNotes">
+      <template v-if="show">
+        <el-dialog
+          title="【特記情報 編集】"
+          :visible.sync="show"
+          :width="notesDialogWidth"
+          custom-class="slide-dialog"
+          top="0px"
+          :modal="false"
+        >
 
-    </el-dialog>
-      <!-- </template>
-    </transition> -->
+          <CreateNotes :detail="detail"/>
+
+        </el-dialog>
+      </template>
+    </transition>
   </div>
 </template>
 <style>
-@keyframes dialog-fade-in {
-  0% {
-    transform: translate3d(0, 100%, 0);
-    opacity: 0;
+  .slideNotes-enter-active {
+    transition: 0.5s;
   }
-  100% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
+
+  .slideNotes-leave-active {
+    transition: 0.8s;
   }
-}
-@keyframes dialog-fade-out {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
+
+  .slideNotes-enter {
+    transform: translate(100%, 0);
   }
-  100% {
-    transform: translate3d(0, -100%, 0);
-    opacity: 0;
+
+  .slideNotes-leave-to {
+    transform: translate( 100%, 0);
   }
-}
 </style>
-<style>
-.notetransition-enter-active, .notetransition-leave-active {
-  transition: opacity .5s;
-}
-.notetransition-enter, .notetransition-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-</style>
+
 <script>
 import MaintenanceResource from '@/api/maintenance';
 
@@ -158,6 +150,9 @@ export default {
   },
   data() {
     return {
+      show: false,
+
+      notesDialogWidth: '40%',
       mail_data: 'mailto:' + this.detail.user.email,
       userName: '', 
       createNotesVisible: false,
@@ -178,11 +173,24 @@ export default {
       this.userName = user.name;
     });
   },
+
+  mounted() {
+    if(this.isMobile()) {
+      this.notesDialogWidth = '100%';
+    }    
+  },
+
   methods: {
-    createNotesShow() {
-      this.createNotesVisible = true;
-      document.querySelector('#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(10) > div > div.el-dialog__body > div > div.el-dialog__wrapper').classList.remove('close-css');
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
     },
+
+    createNotesShow() {
+      document.getElementById('createnotesVisible').click();
+    },
+
     getsend() {
       var emails_ge = "", emails_cc = "", emails = "", subject="";
       var flag = 0, flag_re = 0, first_check = 0;

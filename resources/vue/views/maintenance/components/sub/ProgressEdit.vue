@@ -231,14 +231,7 @@ export default {
 
   methods: {
     handleClose(){
-      var div_edit = document.querySelector('#app > div > div.main-container > section > div > div.el-row > div:nth-child(2) > div > div.el-card__body > div:nth-child(6)');
-      if(div_edit) {
-        div_edit.classList.add('close-css');
-      }
-      var div_modal = document.querySelector("body > div:nth-child(8)");
-      if (div_modal) {
-        div_modal.classList.remove('v-modal');
-      }  
+      document.querySelector("#app > div > div.main-container > section > div > div.el-row > div:nth-child(2) > div > div.el-card__body > div.el-dialog__wrapper.slide-dialog-wrapper").click();
     },
     save() {
       this.$refs.uploadReport.submit();

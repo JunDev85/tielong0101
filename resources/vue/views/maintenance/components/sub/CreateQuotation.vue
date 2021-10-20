@@ -248,13 +248,18 @@ export default {
   },
   methods: {
     deleteQuotationId(id){
-      var data = {
-        maintenance_id: this.detail.maintenance_id,
+
+      if(confirm('削除していいですか？')) {
+        var data = {
+          maintenance_id: this.detail.maintenance_id,
+        }
+        resource.deleteQuotationId(id, data).then((res) => {
+          this.detail.quotation_info = res;
+          this.$emit('create');
+        });
+      } else{
+        return;
       }
-      // alert(id);
-      resource.deleteQuotationId(id, data).then((res) => {
-        this.detail.quotation_info = res;
-      });
     },
     handleClose(){
       var div_create = document.querySelector("#app > div > div.main-container > section > div > div.el-dialog__wrapper.slide-dialog-wrapper > div > div.el-dialog__body > div > div:nth-child(1) > div.el-dialog__wrapper.slide-dialog-wrapper");

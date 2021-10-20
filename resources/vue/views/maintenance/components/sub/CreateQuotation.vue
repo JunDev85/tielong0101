@@ -159,6 +159,7 @@
       style="width: 100%; margin-top: 2%"
     >
       <el-table-column align="center" prop="date" label="日時" />
+      <el-table-column align="center" prop="kind" :formatter="formatterKind" label="種類" />
       <el-table-column
         align="center"
         prop="amount"
@@ -276,6 +277,11 @@ export default {
     formatterCurrency(row, column) {
       if (row.amount == null) return;
       return '¥' + row.amount;
+    },
+
+    formatterKind(row, column){
+      if(row.kind == '') return;
+      return this.quotationKind[row.kind];
     },
 
     save() {

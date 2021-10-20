@@ -324,7 +324,7 @@ export default {
       this.custom = '';
       this.selectedRow = '';
 
-      document.querySelector("#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(11) > div > div.el-dialog__body > div > div.el-dialog__wrapper").classList.add('close-css');
+     document.getElementById('createcustomerVisible').click();
     },
     depart_name() {
       if (!this.customergroup_code) {

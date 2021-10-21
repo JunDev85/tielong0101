@@ -16,7 +16,7 @@
 
     <el-dialog
       :visible.sync="reportpdfviewVisible"
-      width="45%"
+      :width="viewDialogWidth"
       :modal="false"
     >
       <span slot="title" ><i class="el-icon-info"></i> {{ reporttitleData }} </span>
@@ -51,15 +51,26 @@ export default {
       reportpdfviewVisible: false,
       reportpdfSrc: '',
       reporttitleData: '',
+      viewDialogWidth: '45%',
     };
     
   },
+
+  mounted() {
+    if(this.isMobile()) {
+      this.viewDialogWidth = '100%';
+    }    
+  },
+
   methods: {
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
+    },
 
     reportFileView(file_name, file_path) {
-      // var split_path = file_path.split('/');
-      // var fileName = split_path[split_path.length - 1];
-      // var actionUrl =  './maintenance/reportfile/' + fileName;
+
 
       /* s3 file get */
       var actionUrl = './zensho-mainte/reportfile/' + this.detail.maintenance_id + '/' + file_name;

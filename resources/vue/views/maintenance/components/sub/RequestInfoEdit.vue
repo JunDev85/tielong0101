@@ -265,7 +265,20 @@ export default {
     this.data_re = JSON.parse(JSON.stringify(this.detail));
     this.getList();
   },
+
+  mounted() {
+    if(this.isMobile()) {
+      this.createdialogWidth = '100%';
+    }
+  },
+  
   methods: {
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
+    },
+  
     createCustomerVisibleSetting() {
       this.$route.params['custom_tableData'] = '';
       this.$route.params['selectedRow'] = 0;      

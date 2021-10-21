@@ -65,7 +65,7 @@
     <el-dialog
       title="【見積書ファイルリスト】"
       :visible.sync="quotationFilesVisible"
-      width="700px"
+      :width="filedialogWidth"
     >
       <quotation-files :detail="detail" />
       <span slot="footer" class="dialog-footer">
@@ -75,7 +75,7 @@
     <el-dialog
       title="【写真リスト】"
       :visible.sync="photoFilesVisible"
-      width="700px"
+      :width="filedialogWidth"
     >
       <photo-files :detail="detail" />
       <span slot="footer" class="dialog-footer">
@@ -86,7 +86,7 @@
     <el-dialog
       title="【報告書ファイルリスト】"
       :visible.sync="reportFilesVisible"
-      width="700px"
+      :width="filedialogWidth"
     >
       <report-files :detail="detail" />
       <span slot="footer" class="dialog-footer">
@@ -97,7 +97,7 @@
     <el-dialog
       title="経過情報 登録"
       :visible.sync="editVisible"
-      width="60%"
+      :width="editdialogWidth"
       custom-class="slide-dialog"
       top="0px"
     >
@@ -107,10 +107,6 @@
 </template>
 
 <script>
-// console.log("detail.maintenance_progress")
-// var last_element = this.maintenance_progress[this.detail.maintenance_progress.length - 1];
-// var dd = new Date(GMT).toISOString().replace(/T/, ' ').replace(/\..+/, '');
-// console.log(last_element);
 import QuotationFiles from './sub/QuotationFiles.vue';
 import PhotoFiles from './sub/PhotoFiles.vue';
 import ReportFiles from './sub/ReportFiles.vue';
@@ -136,6 +132,8 @@ export default {
       q_cnt: 0,
       r_cnt: 0,
       p_cnt: 0,
+      filedialogWidth: '700px',
+      editdialogWidth: '60%',
     };
   },
   created() {
@@ -172,11 +170,20 @@ export default {
 
     this.filesCnt();
     this.getBreakDate();
+
+    if(this.isMobile()) {
+      this.filedialogWidth = '100%';
+      this.editdialogWidth = '100%';
+    }
+
   },
   methods: {
-      handleClose() {
-    this.$emit('update:dialogEdit', false);
-  },
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
+    },
+
     filesCnt() {
       var quotation_cnt = 0,
         photo_cnt = 0,

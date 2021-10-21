@@ -15,7 +15,7 @@
       </el-col>
     </el-row>
 
-    <el-dialog title="" :visible.sync="qaVisible" width="900px" custom-class="slide-dialog" top="0px">
+    <el-dialog title="" :visible.sync="qaVisible" :width="qaDialogWidth" custom-class="slide-dialog" top="0px">
       <qa-dialog v-if="detail" :detail="detail" />
     </el-dialog>
 
@@ -37,16 +37,31 @@ export default {
   components: { RequestInfo, HistoryInfo, QaDialog, BottomDialog },
   data() {
     return {
+      qaDialogWidth: '900px',
       qaVisible: false,
       bottomVisible: false,
       detail: null,
       visibleflag: true,
     };
   },
+
   created() {
     this.getDetail();
   },
+
+  mounted() {
+    if(this.isMobile()) {
+      this.qaDialogWidth = '100%';
+    }
+  },
+
   methods: {
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
+    },
+    
     async getDetail() {
       const id = this.$route.params && this.$route.params.id;
       this.detail = await resource.get(id);

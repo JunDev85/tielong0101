@@ -9,7 +9,7 @@
 
 
 <style>
-  @media screen and (max-width: 520px) {
+  @media screen and (max-width: 737px) {
     #bottomDialog {
       margin-top: 0px;
     }

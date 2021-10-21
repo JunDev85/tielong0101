@@ -163,7 +163,7 @@
     display: none;
   }
 
-  @media screen and (max-width: 520px) {
+  @media screen and (max-width: 737px) {
     #app > div > div.main-container > section > div > div.el-row > div:nth-child(2) > div > div.el-card__body > div.el-dialog__wrapper.slide-dialog-wrapper > div > div.el-dialog__body > div > div:nth-child(5) > div.el-col.el-col-10 {
       width: 75%;
       padding-left: 15px;

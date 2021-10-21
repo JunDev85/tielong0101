@@ -234,7 +234,7 @@ export default {
   },
   data() {
     return {
-      createdialogWidth: '43%',
+      createdialogWidth: '57%',
       show: false,
       row_id:'',
       custom: null,

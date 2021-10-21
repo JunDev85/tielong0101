@@ -84,7 +84,7 @@
     </el-row>
     <el-row :gutter="0">
       <el-col :span="10">
-        <table class="detail-table">
+        <table class="detail-table"  style="display: none">
           <tbody>
             <tr>
               <th>区分コード</th>
@@ -202,7 +202,7 @@
         <th style="width: 111px">取引先コード</th>
         <th>取引先名</th>
         <th>取引先名(カナ)</th>
-        <th style="width: 104px">区分コード</th>
+        <th style="width: 104px">区分</th>
         <th style="width: 125px">TEL</th>
         <th style="width: 125px">FAX</th>
       </tr>
@@ -215,7 +215,7 @@
           <td align="center">{{ citem.customer_code }}</td>
           <td align="center">{{ citem.customer_name }}</td>
           <td align="center">{{ citem.customer_alias }}</td>
-          <td align="center">{{ citem.customergroup_code }}</td>
+          <td align="center">{{ citem.customergroup }}</td>
           <td align="center">{{ citem.TEL }}</td>
           <td align="center">{{ citem.FAX }}</td>
         </tr>

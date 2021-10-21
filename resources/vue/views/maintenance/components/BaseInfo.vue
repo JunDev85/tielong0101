@@ -71,11 +71,11 @@
       <tbody>
         <tr>
           <th>特記①</th>
-          <td>{{ detail.shop.note1 }}</td>
+          <td style="white-space: pre-wrap;">{{ detail.shop.note1 }}</td>
         </tr>
         <tr>
           <th>特記②</th>
-          <td>{{ detail.shop.note2 }}</td>
+          <td style="white-space: pre-wrap;">{{ detail.shop.note2 }}</td>
         </tr>
       </tbody>
     </table>
@@ -160,7 +160,6 @@ export default {
  
 
       tableData: [
-        { title: '地域会社', name: '-', manager: '-', to: false, cc: false },
         { title: '営業部', name: this.detail.department_names[0]['department_name'], manager: this.detail.departmentUserNEs[0]['name'], email: this.detail.departmentUserNEs[0]['email'], to: false, cc: false },
         { title: 'ディストリクト', name: this.detail.district_names[0]['district_name'], manager: this.detail.districtUserNEs[0]['name'], email: this.detail.districtUserNEs[0]['email'], to: false, cc: false },
         { title: 'ブロック', name: this.detail.block_names[0]['block_name'], manager: this.detail.blockUsersNEs[0]['name'], email: this.detail.blockUsersNEs[0]['email'], to: false, cc: false },
@@ -257,26 +256,3 @@ export default {
   },
 };
 </script>
-
-<style>
-@keyframes dialog-fade-in {
-  0% {
-    transform: translate3d(0, 100%, 0);
-    opacity: 0;
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  }
-}
-@keyframes dialog-fade-out {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  } 
-  100% {
-    transform: translate3d(0, -100%, 0);
-    opacity: 0;
-  }
-}
-</style>

@@ -331,7 +331,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 520px) {
+@media screen and (max-width: 737px) {
   .app-main .app-container .filter-container .list-inline li {
     margin: 0px!important;
     padding-bottom: 10px;

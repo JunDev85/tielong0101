@@ -83,6 +83,12 @@ class MaintenanceController extends Controller
 
         $qb = Maintenance::with(['shop.business_category', 'orderType', 'progress', 'user'])->whereNotNull('shop_id');
 
+        $keyword = $request->input('keyword');
+
+        if ($keyword) {
+            $qb->where('order', 'like', '%' . $keyword . '%');
+        }
+
         if ($shop_id != 0) {
             $qb->where('shop_id', $shop_id);
         } else {

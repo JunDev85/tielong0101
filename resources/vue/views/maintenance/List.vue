@@ -120,12 +120,6 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="設備名">
-        <template slot-scope="scope">
-          <span>{{ scope.row.equipment }}</span>
-        </template>
-      </el-table-column>
-
       <el-table-column align="center" label="経過ステータス">
         <template slot-scope="scope">
           <span>{{ scope.row.progress.status }}</span>

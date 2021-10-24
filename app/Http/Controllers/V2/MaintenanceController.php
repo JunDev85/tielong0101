@@ -447,25 +447,25 @@ class MaintenanceController extends Controller
 
         $qphotofile = Uploading_files::select('file_name')->where('kind', 'quotation_photo')
         ->where('info_id', $quotation_info_id)->first();
-        var_export($quotation_info_id);
-        var_export($qphotofile);
-        var_export($qphotofile->file_name); die;
-        $qphoto = $qphotofile->file_name;
+        if($qphotofile){
+            $qphoto = $qphotofile->file_name;
+            if($qphoto){
+                $qphotopath = '/zensho-mainte/quotationfiles/'.$maintenance_id.'/'. $qphoto;
+                Storage::disk('s3')->delete($qphotopath);
+            }
+        }
+        
 
         $quotationfile = Uploading_files::select('file_name')->where('kind', 'quotation')
         ->where('info_id', $quotation_info_id)->first();
-        $quotation = $quotationfile->file_name;
-
-        if($qphoto){
-            $qphotopath = '/zensho-mainte/quotationfiles/'.$maintenance_id.'/'. $qphoto;
-            Storage::disk('s3')->delete($qphotopath);
+        if($quotationfile){
+            $quotation = $quotationfile->file_name;
+            if($quotation) {
+                $quotationpath = '/zensho-mainte/quotationfiles/'.$maintenance_id.'/'. $quotation;   
+                Storage::disk('s3')->delete($quotationpath);
+            }
         }
-
-        if($quotation) {
-            $quotationpath = '/zensho-mainte/quotationfiles/'.$maintenance_id.'/'. $quotation;   
-            Storage::disk('s3')->delete($quotationpath);
-        }
-
+        
         Quotation_info::where('quotation_info_id', $quotation_info_id)->delete();
 
         Uploading_files::where('kind', 'quotation_photo')

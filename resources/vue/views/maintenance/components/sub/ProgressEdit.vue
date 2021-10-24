@@ -73,7 +73,7 @@
             <tr>
               <th>対応期限*</th>
               <td class="input-td">
-                <date-picker v-model="time1" valueType="format" placeholder="日付を選択してください。" ></date-picker>
+                <datetime v-model="time1" valueType="format" placeholder="日付を選択してください。" ></datetime>
               </td>
             </tr>
           </tbody>
@@ -220,13 +220,12 @@
 
 <script>
 import MaintenanceResource from '@/api/maintenance';
-import DatePicker from 'vue2-datepicker';
-import 'vue2-datepicker/index.css';
-import 'vue2-datepicker/locale/ja';
+import 'vue-datetime/dist/vue-datetime.css';
+import { Datetime } from 'vue-datetime';
 const resource = new MaintenanceResource();
 
 export default {
-  components: { DatePicker  },
+  components: { Datetime },
   props: {
     detail: {
       type: Object,
@@ -237,7 +236,7 @@ export default {
   },
   data() {
     return {
-      time1: '',
+      time1: null,
       currentStatus: this.detail.progress.status,
       cond1: true,
       userName: '',

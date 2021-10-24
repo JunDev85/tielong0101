@@ -109,6 +109,7 @@
                     detail.maintenance_id
                   "
                   :auto-upload="false"
+                  :limit="1"
                   :multiple="false"
                   :on-success="getUploadFiles()"
                 >
@@ -135,6 +136,7 @@
                     '/api/v2/maintenance/uploadQuotation/photo/' + detail.maintenance_id
                   "
                   :auto-upload="false"
+                  :limit="1"
                   :multiple="false"
                   :on-success="getUploadFiles()"
                 >
@@ -264,7 +266,7 @@ export default {
     handleClose(){
       document.querySelector("#app > div > div.main-container > section > div > div.el-dialog__wrapper.slide-dialog-wrapper > div > div.el-dialog__body > div > div:nth-child(1) > div.el-dialog__wrapper.slide-dialog-wrapper").click();
     },
-    
+
     filesCnt() {
       var quotation_cnt = 0,
         photo_cnt = 0;

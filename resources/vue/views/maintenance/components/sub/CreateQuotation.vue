@@ -302,6 +302,8 @@ export default {
       resource
         .createQuotation(this.detail.maintenance_id, insertData)
         .then((res) => {
+          this.$refs.uploadQuotationPhoto.reset();
+          this.$refs.uploadQuotation.reset();
           this.detail.quotation_info = res;
           this.comment = '';
           this.kind = '';

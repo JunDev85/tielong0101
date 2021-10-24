@@ -342,7 +342,7 @@ class MaintenanceController extends Controller
             $reportFile->file_name = $file_name;
             $reportFile->maintenance_id = $maintenance_id;
             $reportFile->info_id = $quotationId['quotation_info_id'];
-            $reportFile->kind = 'quotation_photo';
+            $reportFile->kind = 'quotationphoto';
             $reportFile->save();
 
             return response()->json([

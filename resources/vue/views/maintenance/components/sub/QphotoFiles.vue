@@ -46,6 +46,9 @@
 </template>
 
 <script>
+import MaintenanceResource from '@/api/maintenance';
+
+const resource = new MaintenanceResource();
 export default {
   props: {
     detail: {

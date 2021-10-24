@@ -54,25 +54,13 @@
     </el-dialog>
     <el-dialog
       :modal="false"
-      title="【写真リスト】"
+      title="【見積書写真リスト】"
       :visible.sync="photoFilesVisible"
       :width="filedialogWidth"
     >
-      <photo-files :detail="detail" />
+      <qphoto-files :detail="detail" />
       <span slot="footer" class="dialog-footer">
         <el-button @click="photoFilesVisible = false">閉じる</el-button>
-      </span>
-    </el-dialog>
-
-    <el-dialog
-      title="【報告書ファイルリスト】"
-      :visible.sync="reportFilesVisible"
-      :width="filedialogWidth"
-      :modal="false"
-    >
-      <report-files :detail="detail" />
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="reportFilesVisible = false">閉じる</el-button>
       </span>
     </el-dialog>
 
@@ -91,7 +79,7 @@
 
 <script>
 import QuotationFiles from './sub/QuotationFiles.vue';
-import PhotoFiles from './sub/PhotoFiles.vue';
+import QphotoFiles from './sub/QphotoFiles.vue';
 import ReportFiles from './sub/ReportFiles.vue';
 import ProgressEdit from './sub/ProgressEdit.vue';
 
@@ -103,7 +91,7 @@ import Resource from '@/api/resource';
 export default {
   components: {
     QuotationFiles,
-    PhotoFiles,
+    QphotoFiles,
     ProgressEdit,
     ReportFiles,
     QuotationInfo,

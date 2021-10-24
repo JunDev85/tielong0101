@@ -443,10 +443,9 @@ class MaintenanceController extends Controller
 
     public  function deleteQuotationId(Request $request, $quotation_info_id)
     {
-        // Quotation_info::where('quotation_info_id', $quotation_info_id)->delete();
+        Quotation_info::where('quotation_info_id', $quotation_info_id)->delete();
 
         Uploading_files::where('kind', 'quotation_photo')
-                        // ->where('maintenance_id', $request->input('maintenance_id'))
                         ->where('info_id', $quotation_info_id)->delete();
 
         $result = Quotation_info::where('maintenance_id', $request->input('maintenance_id'))->get();

@@ -68,9 +68,17 @@ export default {
     if(this.isMobile()) {
       this.viewDialogWidth = '100%';
     }    
+
+    this.getUploadFiles();
   },
 
   methods: {
+    getUploadFiles() {
+      resource.getUploadFiles(this.detail.maintenance_id).then((files) => {
+        this.detail.uploading_files = files;
+      });
+    },
+
     isMobile() {
       var check = true;
       if(document.querySelector("body").clientWidth > 737) check = false;

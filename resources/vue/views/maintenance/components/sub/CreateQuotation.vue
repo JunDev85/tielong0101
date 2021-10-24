@@ -111,6 +111,7 @@
                   :auto-upload="false"
                   :limit="1"
                   :multiple="false"
+                  :on-success="getUploadFiles()"
                 >
                   <el-button slot="trigger" size="small" type="info"
                     >ファイル選択</el-button
@@ -137,6 +138,7 @@
                   :auto-upload="false"
                   :limit="1"
                   :multiple="false"
+                  :on-success="getUploadFiles()"
                 >
                   <el-button slot="trigger" size="small" type="info"
                     >ファイル選択</el-button
@@ -317,6 +319,14 @@ export default {
           this.filesCnt();
           // this.$emit('create');
         });
+    },
+
+    getUploadFiles() {
+      resource.getUploadFiles(this.detail.maintenance_id).then((files) => {
+        this.detail.uploading_files = files;
+
+        this.filesCnt();
+      });
     },
 
   },

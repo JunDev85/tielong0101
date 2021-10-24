@@ -447,6 +447,7 @@ class MaintenanceController extends Controller
 
         $qphotofile = Uploading_files::select('file_name')->where('kind', 'quotation_photo')
         ->where('info_id', $quotation_info_id)->first();
+        var_export($quotation_info_id);
         var_export($qphotofile); die;
         $qphoto = $qphotofile->file_name;
 

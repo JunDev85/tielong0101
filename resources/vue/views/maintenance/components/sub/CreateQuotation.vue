@@ -291,8 +291,7 @@ export default {
 
     save() {
       var quotatioPhotoCnt = this.$refs.uploadQuotationPhoto.uploadFiles.length;
-      var quotationCnt = this.$refs.uploadQuotation.length;
-      alert(quotationCnt); return;
+      var quotationCnt = this.$refs.uploadQuotation.uploadFiles.length;
 
       this.$refs.uploadQuotationPhoto.submit();
       this.$refs.uploadQuotation.submit();

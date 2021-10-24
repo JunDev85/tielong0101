@@ -370,9 +370,9 @@ class MaintenanceController extends Controller
 
             //store file into document folder
             // $file = $request->file->store('public/quotations');
-            // if (!Storage::disk('s3')->exists('/zensho-mainte/quotationfiles/'.$maintenance_id)) {
-            //     Storage::disk('s3')->makeDirectory('/zensho-mainte/quotationfiles/'.$maintenance_id);
-            // }
+            if (!Storage::disk('s3')->exists('/zensho-mainte/quotationfiles/'.$maintenance_id)) {
+                Storage::disk('s3')->makeDirectory('/zensho-mainte/quotationfiles/'.$maintenance_id);
+            }
 
             $file_name = $request->file('file')->getClientOriginalName();
             $file_data =  $request->file('file');
@@ -443,12 +443,32 @@ class MaintenanceController extends Controller
 
     public  function deleteQuotationId(Request $request, $quotation_info_id)
     {
+        $maintenance_id = $request->input('maintenance_id');
+
+        $qphotofile = Uploading_files::select('file_name')->where('kind', 'quotation_photo')
+        ->where('info_id', $quotation_info_id)->first();
+        $qphoto = $qphotofile->file_name;
+
+        $quotationfile = Uploading_files::select('file_name')->where('kind', 'quotation')
+        ->where('info_id', $quotation_info_id)->first();
+        $quotation = $quotationfile->file_name;
+
+        if($qphoto){
+            $qphotopath = '/zensho-mainte/quotationfiles/'.$maintenance_id.'/'. $qphoto;
+            Storage::disk('s3')->delete($qphotopath);
+        }
+
+        if($quotation) {
+            $quotationpath = '/zensho-mainte/quotationfiles/'.$maintenance_id.'/'. $quotation;   
+            Storage::disk('s3')->delete($quotationpath);
+        }
+
         Quotation_info::where('quotation_info_id', $quotation_info_id)->delete();
 
         Uploading_files::where('kind', 'quotation_photo')
                         ->where('info_id', $quotation_info_id)->delete();
 
-        $result = Quotation_info::where('maintenance_id', $request->input('maintenance_id'))->get();
+        $result = Quotation_info::where('maintenance_id', $maintenance_id)->get();
 
         return response($result);
     }

@@ -269,8 +269,8 @@ export default {
       var quotation_cnt = 0,
         qphoto_cnt = 0;
       this.detail.quotation_info.forEach((el) => {
-        if (el.photo_files_cnt > 0) quotation_cnt++;
-        if (el.quotation_files_cnt > 0) qphoto_cnt++;
+        if (el.photo_files_cnt > 0) qphoto_cnt++;
+        if (el.quotation_files_cnt > 0) quotation_cnt++;
       });
 
       this.$route.params['q_cnt'] = quotation_cnt;
@@ -313,6 +313,8 @@ export default {
           this.amount = '';
           this.faxedToClient = false;
           this.faxedToShop = false;
+
+          this.filesCnt();
           // this.$emit('create');
         });
     },

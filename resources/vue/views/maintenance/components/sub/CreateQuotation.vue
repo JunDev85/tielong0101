@@ -130,9 +130,9 @@
               <th>写真</th>
               <td style="border: none; padding: 0 5px">
                 <el-upload
-                  ref="uploadPhoto"
+                  ref="uploadQuotationPhoto"
                   :action="
-                    '/api/v2/maintenance/upload/photo/' + detail.maintenance_id
+                    '/api/v2/maintenance/uploadQuotation/photo/' + detail.maintenance_id
                   "
                   :auto-upload="false"
                   :multiple="false"
@@ -288,7 +288,7 @@ export default {
 
     save() {
 
-      this.$refs.uploadPhoto.submit();
+      this.$refs.uploadQuotationPhoto.submit();
       this.$refs.uploadQuotation.submit();
       const insertData = {
         date: DateTime.fromISO(this.date).toFormat('yyyy-MM-dd hh:mm'),

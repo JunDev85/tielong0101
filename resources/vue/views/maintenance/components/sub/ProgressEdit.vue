@@ -1,14 +1,44 @@
 <template>
   <div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <el-row style="left: 41.66%">
+      <el-col :span="9" :offset="5">
+        <table class="detail-table">
+          <tbody>
+            <tr>
+              <th>入力者</th>
+              <td>{{ userName }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </el-col>
+    </el-row>
     <el-row :gutter="20">
       <el-col :span="10">
         <table class="detail-table">
           <tbody>
             <tr>
-              <th>経過ステータス*</th>
+              <th>現状ステータス*</th>
+              <td>
+                {{ currentStatus }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </el-col>
+      <el-col :span="2">
+        <p style="text-align: center">
+          <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+        </p>
+      </el-col>
+      <el-col :span="8">
+        <table class="detail-table">
+          <tbody>
+            <tr>
+              <th>変更後ステータス*</th>
               <td class="select-td">
-                <el-select v-model="progressId" size="small" :multiple="false" placeholder="ステータス" clearable style="width: 100%" class="filter-item">
-                  <el-option label="すべて選択" :value="0" />
+                <el-select v-model="progressId" size="small" :multiple="false" placeholder="一一一" clearable style="width: 100%" class="filter-item" v-on:change="selectProgressId()">
+                  <el-option label="一一一" :value="0" />
                   <el-option label="BM承認待" :value="1" />
                   <el-option label="BM承認" :value="2" />
                   <el-option label="BM差戻し" :value="3" />
@@ -35,12 +65,16 @@
           </tbody>
         </table>
       </el-col>
-      <el-col :span="11" :offset="3">
+    </el-row>
+    <el-row :gutter="20">
+      <el-col :span="10">
         <table class="detail-table">
           <tbody>
             <tr>
-              <th>入力者</th>
-              <td>{{ userName }}</td>
+              <th>対応期限*</th>
+              <td class="input-td">
+                <date-picker v-model="time1" valueType="format" placeholder="日付を選択してください。" ></date-picker>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -163,6 +197,14 @@
     display: none;
   }
 
+  input.mx-input {
+    font-size: 16px;
+  }
+
+  .mx-datepicker {
+    width: -webkit-fill-available;
+  }
+
   @media screen and (max-width: 737px) {
     #app > div > div.main-container > section > div > div.el-row > div:nth-child(2) > div > div.el-card__body > div.el-dialog__wrapper.slide-dialog-wrapper > div > div.el-dialog__body > div > div:nth-child(5) > div.el-col.el-col-10 {
       width: 75%;
@@ -178,9 +220,13 @@
 
 <script>
 import MaintenanceResource from '@/api/maintenance';
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+import 'vue2-datepicker/locale/ja';
 const resource = new MaintenanceResource();
 
 export default {
+  components: { DatePicker  },
   props: {
     detail: {
       type: Object,
@@ -191,12 +237,14 @@ export default {
   },
   data() {
     return {
+      time1: '',
+      currentStatus: this.detail.progress.status,
       cond1: true,
       userName: '',
       comment: '',
       faxedToClient: 0,
       faxedToShop: 0,
-      progressId: 1,
+      progressId: 0,
       progress: {
         1: 'BM承認待ち',
         2: 'BM承認',
@@ -230,10 +278,20 @@ export default {
   },
 
   methods: {
+    selectProgressId() {
+      this.currentStatus = this.progress[this.progressId];
+    },
+
     handleClose(){
       document.querySelector("#app > div > div.main-container > section > div > div.el-row > div:nth-child(2) > div > div.el-card__body > div.el-dialog__wrapper.slide-dialog-wrapper").click();
     },
+
     save() {
+      if(this.currentStatus == this.detail.progress.status) {
+        this.$emit('create');
+        return;
+      } 
+
       this.$refs.uploadReport.submit();
       this.$refs.uploadPhoto.submit();
       const insertData = {
@@ -241,15 +299,15 @@ export default {
         comment: this.comment,
         faxed_to_client: this.faxedToClient,                                                                                                    
         faxed_to_shop: this.faxedToShop,
+        deadline_date: this.time1,
       };
+
       resource.createProgress(this.detail.maintenance_id, insertData).then(res => {
         this.detail.maintenance_progress = res;
-        console.log(res);
         this.detail.progress_id = this.progressId;
         this.detail.progress = {
           progress_id: this.progressId,
           status: this.progress[this.progressId],
-          // updated_at: this.detail.maintenance_id,
         };
        
         this.comment = '';

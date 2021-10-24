@@ -89,6 +89,12 @@ class MaintenanceController extends Controller
             $qb->where('order', 'like', '%' . $keyword . '%');
         }
 
+        $eventCheck = $request->input('eventCheck');
+
+        if($eventCheck == 'true') {
+            $qb->whereRaw("DATE_FORMAT(created_at,'%m/%d/%Y') > DATE_FORMAT(deadline_date,'%m/%d/%Y')");
+        }
+
         if ($shop_id != 0) {
             $qb->where('shop_id', $shop_id);
         } else {
@@ -164,6 +170,9 @@ class MaintenanceController extends Controller
         $maintenance->progress_id = $request->input('progress_id');
         if($request->input('progress_id') == 21) {
             $maintenance->completed_date = $maintenance_progress[0]['updated_at'];
+        }
+        if($request->input('deadline_date')) {
+            $maintenance->deadline_date = $request->input('deadline_date');
         }
         $maintenance->save();
 
@@ -265,17 +274,10 @@ class MaintenanceController extends Controller
 
         if ($request->file('file')) {
 
-            //store file into document folder
-            // $file = $request->file->store('public/photos');
-
             $file_name = $request->file('file')->getClientOriginalName();
             $file_data =  $request->file('file');
 
             /* s3 file upload  */
-
-
-
-            // Storage::disk('local')->put("zensho-mainte/photofiles/$maintenance_id/$file_name",file_get_contents($file_data), 'public');   
 
             if (!Storage::disk('s3')->exists('/zensho-mainte/photofiles/'.$maintenance_id)) {
                 Storage::disk('s3')->makeDirectory('/zensho-mainte/photofiles/'.$maintenance_id);
@@ -284,14 +286,9 @@ class MaintenanceController extends Controller
             $filePath = '/zensho-mainte/photofiles/'.$maintenance_id.'/'. $file_name;
             Storage::disk('s3')->put($filePath, file_get_contents($file_data), 'private');
 
-
-
             //store your file into database
             $reportFile = new Uploading_files();
 
-            /* local file upload */
-            // $reportFile->file_path = $file;
-            // $reportFile->file_name = $request->file('file')->getClientOriginalName();
 
             /* s3 file upload */
             $reportFile->file_name = $file_name;
@@ -300,6 +297,53 @@ class MaintenanceController extends Controller
             $reportFile->save();
 
 
+
+            return response()->json([
+                "success" => true,
+                "message" => "File successfully uploaded",
+                "file" => $file_name,
+            ]);
+        }
+    }
+
+    public function uploadQuotationPhoto(Request $request, $maintenance_id)
+    {
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'file' => 'required|mimes:jpg,jpeg,png|max:204800',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 401);
+        }
+
+        if ($request->file('file')) {
+
+
+            $file_name = $request->file('file')->getClientOriginalName();
+            $file_data =  $request->file('file');
+
+            if (!Storage::disk('s3')->exists('/zensho-mainte/quotation_photo_files/'.$maintenance_id)) {
+                Storage::disk('s3')->makeDirectory('/zensho-mainte/quotation_photo_files/'.$maintenance_id);
+            }
+
+            $filePath = '/zensho-mainte/quotation_photo_files/'.$maintenance_id.'/'. $file_name;
+            Storage::disk('s3')->put($filePath, file_get_contents($file_data), 'private');
+
+
+
+            //store your file into database
+            $quotationId = Quotation_info::latest()->first();
+            $reportFile = new Uploading_files();
+
+            $reportFile->file_name = $file_name;
+            $reportFile->maintenance_id = $maintenance_id;
+            $reportFile->info_id = $quotationId['quotation_info_id'];
+            $reportFile->kind = 'quotation_photo';
+            $reportFile->save();
 
             return response()->json([
                 "success" => true,

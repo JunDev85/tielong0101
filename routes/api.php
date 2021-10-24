@@ -93,6 +93,7 @@ Route::group(['namespace' => 'V2'], function () {
 
     Route::post('v2/maintenance/upload/report/{mantenance_id}', 'MaintenanceController@uploadReport');
     Route::post('v2/maintenance/upload/photo/{mantenance_id}', 'MaintenanceController@uploadPhoto');
+    Route::post('v2/maintenance/uploadQuotation/photo/{mantenance_id}', 'MaintenanceController@uploadQuotationPhoto');
     Route::post('v2/maintenance/upload/quotation/{mantenance_id}', 'MaintenanceController@uploadQuotation');
 
     Route::get('v2/maintenance/{mantenance_id}/middle_bigconnect', 'MaintenanceController@middle_bigconnect');

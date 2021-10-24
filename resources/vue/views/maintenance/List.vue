@@ -14,7 +14,11 @@
             <svg-icon icon-class="warning" /> 災害（地震・台風・大雨など）
           </span>
         </li>
-
+        <li>
+          <span class="el-tag el-tag--medium el-tag--light" style="color: #DE38B8; background-color: #FCE5F7; border: 1px solid #E4B4D9" >
+            <el-checkbox v-model="query.eventCheck" @change="handleFilter()" style="color: #DE38B8; background-color: #FCE5F7;"><i style="color: #DE38B8; padding-right: 5px" class="fa">&#xf017;</i><span  style="color: #DE38B8;">対応期限切れ</span>  </el-checkbox>
+          </span>
+        </li>
         <li class="pull-right">
           <ElSelectAll v-model="query.progress_id" clearable filterable multiple collapse-tags :options="mdoptionsList" placeholder="ステータス" class="filter-item"  v-on:change="handleFilter()"/>
 
@@ -126,9 +130,14 @@
         </template>
       </el-table-column>
 
+      <el-table-column align="center" label="対応期限">
+        <template slot-scope="scope">
+          <span>{{ scope.row.deadline_date }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="完了日">
         <template slot-scope="scope">
-          <!-- <span>{{ scope.row.updated_at }}</span> -->
           <span>{{ scope.row.completed_date }}</span>
         </template>
       </el-table-column>
@@ -139,13 +148,6 @@
         </template>
       </el-table-column>
 
-      <!-- <el-table-column align="center" label="アクション">
-        <template slot-scope="scope">
-          <router-link :to="'/maintenance/detail/'+scope.row.maintenance_id" class="link-type">
-            <el-button size="small" type="primary">変更</el-button>
-          </router-link>
-        </template>
-      </el-table-column> -->
     </el-table>
     <div style="text-align:center;">
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
@@ -155,7 +157,7 @@
 <style>
 
 .custom-highlight-row{
-  background-color: pink!important;
+  background-color: #f7b8f0!important;
 }
 
 .custom-danger-row{
@@ -190,6 +192,7 @@ export default {
       total: 0,
       loading: true,
       query: {
+        eventCheck: '',
         page: 1,
         limit: 15,
         keyword: '',
@@ -237,12 +240,19 @@ export default {
   methods: {
     
    tableRowClassName({row, rowIndex}) {
-       if(row.is_emergency > 0) {
-         return 'custom-warning-row';
-       } 
-       if(row.is_disaster > 0) {
-         return 'custom-danger-row';
-       }
+      if(row.is_emergency > 0) {
+        return 'custom-warning-row';
+      } 
+      if(row.is_disaster > 0) {
+        return 'custom-danger-row';
+      }
+
+    var createDate = row.created_at;
+
+    if(createDate.split(' ')[0] > row.deadline_date) {
+      return 'custom-highlight-row';
+    }
+
     return;
   },
 
@@ -260,6 +270,11 @@ export default {
           } 
           if(element.is_disaster > 0) {
              element.maintenance_code = '<i style="color: #ffba00; padding-right: 5px" class="fa">&#xf071;</i>' + element.maintenance_code; 
+          }
+          
+          var createDate = element.created_at;
+          if(createDate.split(' ')[0] > element.deadline_date) {
+             element.maintenance_code = '<i style="color: #DE38B8; padding-right: 5px" class="fa">&#xf017;</i>' + element.maintenance_code;
           }
       });
       this.total = meta.total;

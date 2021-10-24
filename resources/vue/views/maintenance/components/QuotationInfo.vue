@@ -37,10 +37,7 @@
         >見積書({{ this.$route.params['q_cnt'] }})</el-button
       >
       <el-button type="info" size="mini" @click="photoFilesVisible = true"
-        >写真({{ this.$route.params['p_cnt'] }})</el-button
-      >
-      <el-button type="info" size="mini" @click="reportFilesVisible = true"
-        >報告書({{ this.$route.params['r_cnt'] }})</el-button
+        >写真({{ this.$route.params['qp_cnt'] }})</el-button
       >
     </div>
 

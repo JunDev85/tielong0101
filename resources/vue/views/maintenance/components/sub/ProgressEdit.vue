@@ -308,6 +308,10 @@ export default {
           progress_id: this.progressId,
           status: this.progress[this.progressId],
         };
+
+        this.getUploadFiles();
+
+        this.filesCnt();
        
         this.comment = '';
         this.faxedToClient = false;
@@ -335,8 +339,6 @@ export default {
     getUploadFiles() {
       resource.getUploadFiles(this.detail.maintenance_id).then((files) => {
         this.detail.uploading_files = files;
-
-        this.filesCnt();
       });
     },
 

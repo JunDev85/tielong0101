@@ -264,16 +264,17 @@ export default {
     handleClose(){
       document.querySelector("#app > div > div.main-container > section > div > div.el-dialog__wrapper.slide-dialog-wrapper > div > div.el-dialog__body > div > div:nth-child(1) > div.el-dialog__wrapper.slide-dialog-wrapper").click();
     },
+    
     filesCnt() {
       var quotation_cnt = 0,
         photo_cnt = 0;
       this.detail.uploading_files.forEach((el) => {
         if (el.kind == 'quotation') quotation_cnt++;
-        if (el.kind == 'photo') photo_cnt++;
+        if (el.kind == 'qphoto') qphoto_cnt++;
       });
 
       this.$route.params['q_cnt'] = quotation_cnt;
-      this.$route.params['p_cnt'] = photo_cnt;
+      this.$route.params['qp_cnt'] = qphoto_cnt;
     },
 
     formatterCurrency(row, column) {

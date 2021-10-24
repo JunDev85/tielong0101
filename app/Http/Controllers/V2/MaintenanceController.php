@@ -445,6 +445,10 @@ class MaintenanceController extends Controller
     {
         Quotation_info::where('quotation_info_id', $quotation_info_id)->delete();
 
+        Uploading_files::where('kind', 'quotation_photo')
+                        ->where('maintenance_id', $request->input('maintenance_id'))
+                        ->where('info_id', $quotation_info_id)->delete();
+
         $result = Quotation_info::where('maintenance_id', $request->input('maintenance_id'))->get();
 
         return response($result);

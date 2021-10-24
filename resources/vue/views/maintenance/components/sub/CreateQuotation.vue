@@ -269,10 +269,10 @@ export default {
 
     filesCnt() {
       var quotation_cnt = 0,
-        photo_cnt = 0;
+        qphoto_cnt = 0;
       this.detail.uploading_files.forEach((el) => {
         if (el.kind == 'quotation') quotation_cnt++;
-        if (el.kind == 'qphoto') qphoto_cnt++;
+        if (el.kind == 'quotation_photo') qphoto_cnt++;
       });
 
       this.$route.params['q_cnt'] = quotation_cnt;

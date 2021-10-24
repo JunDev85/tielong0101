@@ -111,7 +111,6 @@
                   :auto-upload="false"
                   :limit="1"
                   :multiple="false"
-                  :on-success="getUploadFiles()"
                 >
                   <el-button slot="trigger" size="small" type="info"
                     >ファイル選択</el-button
@@ -138,7 +137,6 @@
                   :auto-upload="false"
                   :limit="1"
                   :multiple="false"
-                  :on-success="getUploadFiles()"
                 >
                   <el-button slot="trigger" size="small" type="info"
                     >ファイル選択</el-button
@@ -246,7 +244,7 @@ export default {
     };    
   },
   mounted() {
-    
+    this.filesCnt();
   },
   methods: {
     deleteQuotationId(id){
@@ -270,9 +268,9 @@ export default {
     filesCnt() {
       var quotation_cnt = 0,
         qphoto_cnt = 0;
-      this.detail.uploading_files.forEach((el) => {
-        if (el.kind == 'quotation') quotation_cnt++;
-        if (el.kind == 'quotation_photo') qphoto_cnt++;
+      this.detail.quotation_info.forEach((el) => {
+        if (el.photo_files_cnt > 0) quotation_cnt++;
+        if (el.quotation_files_cnt > 0) qphoto_cnt++;
       });
 
       this.$route.params['q_cnt'] = quotation_cnt;
@@ -317,14 +315,6 @@ export default {
           this.faxedToShop = false;
           // this.$emit('create');
         });
-    },
-
-    getUploadFiles() {
-      resource.getUploadFiles(this.detail.maintenance_id).then((files) => {
-        this.detail.uploading_files = files;
-
-        this.filesCnt();
-      });
     },
 
   },

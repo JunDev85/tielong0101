@@ -290,6 +290,8 @@ export default {
     },
 
     save() {
+      var quotatioPhotoCnt = this.$refs.uploadQuotationPhoto.uploadFiles.length;
+      var quotationCnt = this.$refs.uploadQuotation.length;
 
       this.$refs.uploadQuotationPhoto.submit();
       this.$refs.uploadQuotation.submit();
@@ -298,8 +300,8 @@ export default {
         kind: this.kind,
         comment: this.comment,
         amount: this.amount,
-        quotation_files_cnt: this.$route.params['q_cnt'],
-        photo_files_cnt: this.$route.params['p_cnt'],
+        quotation_files_cnt: quotatioPhotoCnt,
+        photo_files_cnt: quotationCnt,
         editor: this.userName,
       };
       resource

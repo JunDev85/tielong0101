@@ -310,7 +310,7 @@ export default {
           this.amount = '';
           this.faxedToClient = false;
           this.faxedToShop = false;
-          this.$emit('create');
+          // this.$emit('create');
         });
     },
 

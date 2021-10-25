@@ -20,7 +20,7 @@
             <tr>
               <th>現状ステータス*</th>
               <td>
-                {{ currentStatus }}
+                {{ detail.progress.status }}
               </td>
             </tr>
           </tbody>
@@ -37,7 +37,7 @@
             <tr>
               <th>変更後ステータス*</th>
               <td class="select-td">
-                <el-select v-model="progressId" size="small" :multiple="false" placeholder="一一一" clearable style="width: 100%" class="filter-item" v-on:change="selectProgressId()">
+                <el-select v-model="progressId" size="small" :multiple="false" placeholder="一一一" clearable style="width: 100%" class="filter-item">
                   <el-option label="一一一" :value="0" />
                   <el-option label="BM承認待" :value="1" />
                   <el-option label="BM承認" :value="2" />
@@ -237,7 +237,6 @@ export default {
   data() {
     return {
       time1: null,
-      currentStatus: this.detail.progress.status,
       cond1: true,
       userName: '',
       comment: '',
@@ -277,19 +276,15 @@ export default {
   },
 
   methods: {
-    selectProgressId() {
-      this.currentStatus = this.progress[this.progressId];
-    },
-
     handleClose(){
       document.querySelector("#app > div > div.main-container > section > div > div.el-row > div:nth-child(2) > div > div.el-card__body > div.el-dialog__wrapper.slide-dialog-wrapper").click();
     },
 
     save() {
-      if(this.currentStatus == this.detail.progress.status) {
-        this.$emit('create');
-        return;
-      } 
+      // if(this.currentStatus == this.detail.progress.status) {
+      //   this.$emit('create');
+      //   return;
+      // } 
 
       this.$refs.uploadReport.submit();
       this.$refs.uploadPhoto.submit();

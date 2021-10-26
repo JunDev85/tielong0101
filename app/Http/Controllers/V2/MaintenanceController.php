@@ -116,6 +116,11 @@ class MaintenanceController extends Controller
         return response(['data' => $maintenances, 'meta' => ['total' => $total]]);
     }
 
+    public function eventCheckCountfunc(){
+        $eventCheckCnt = Maintenance::whereRaw("DATE_FORMAT(created_at,'%m/%d/%Y') > DATE_FORMAT(deadline_date,'%m/%d/%Y')")->count();
+        return response($eventCheckCnt);
+    }
+
     public function classHistory(Request $request)
     {
         if ($request->input('sub_category_id') == NULL) return array();

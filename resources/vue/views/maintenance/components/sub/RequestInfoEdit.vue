@@ -77,6 +77,12 @@
           </td>
         </tr>
         <tr>
+          <th>初期対応*</th>
+          <td class="input-td">
+            <textarea v-model="data_re.first_handling" readonly rows="10" />
+          </td>
+        </tr>
+        <tr>
           <th>備考</th>
           <td class="input-td">
             <textarea v-model="data_re.remark" rows="5" />

@@ -17,6 +17,9 @@
         <li>
           <span class="el-tag el-tag--medium el-tag--light" style="color: #DE38B8; background-color: #FCE5F7; border: 1px solid #E4B4D9" >
             <el-checkbox v-model="query.eventCheck" @change="handleFilter()" style="color: #DE38B8; background-color: #FCE5F7;"><i style="color: #DE38B8; padding-right: 5px" class="fa">&#xf017;</i><span  style="color: #DE38B8;">対応期限切れ</span>  </el-checkbox>
+            <span class="badge">  
+              <span id="eventcheckCount">{{ eventcheckCount }}</span>  
+            </span>
           </span>
         </li>
         <li class="pull-right">
@@ -155,6 +158,16 @@
   </div>
 </template>
 <style>
+.badge {
+  position: absolute;
+  top: 73px;
+  padding-top: 2px!important;
+  line-height: 20px;
+  padding: 0px 6px;
+  border-radius: 50%;
+  background-color: #C91313;
+  color: white;
+}
 
 .custom-highlight-row{
   background-color: #f7b8f0!important;
@@ -164,7 +177,6 @@
   background-color: #fff8e6!important;
   content: "\e7a1";
 }
-
 
 .custom-warning-row{
   background-color: #ffdbdb!important;
@@ -188,6 +200,7 @@ export default {
   directives: { waves },
   data() {
     return {
+      eventcheckCount: 0,
       list: null,
       total: 0,
       loading: true,
@@ -233,12 +246,18 @@ export default {
   },
   created() {
     this.getList();   
+    this.eventcheckCountfunc();
   },
   mounted() {
 
   },
   methods: {
-    
+    eventcheckCountfunc(){
+      resource.eventcheckCountfunc().then(res => {
+        this.eventcheckCount = res;
+      });
+    },
+
    tableRowClassName({row, rowIndex}) {
       if(row.is_emergency > 0) {
         return 'custom-warning-row';
@@ -257,7 +276,7 @@ export default {
   },
 
     async getList() {
-          
+
       const { limit, page } = this.query;
       this.loading = true;
       const { data, meta } = await resource.list(this.query);
@@ -271,7 +290,7 @@ export default {
           if(element.is_disaster > 0) {
              element.maintenance_code = '<i style="color: #ffba00; padding-right: 5px" class="fa">&#xf071;</i>' + element.maintenance_code; 
           }
-          
+
           var createDate = element.created_at;
           if(createDate.split(' ')[0] > element.deadline_date) {
              element.maintenance_code = '<i style="color: #DE38B8; padding-right: 5px" class="fa">&#xf017;</i>' + element.maintenance_code;

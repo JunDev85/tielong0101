@@ -128,6 +128,13 @@ class MaintenanceResource extends Resource {
             method: 'get',
         });
     }
+
+    eventcheckCountfunc() {
+        return request({
+            url: this.baseUrl + this.uri + '/eventcheckCountfunc',
+            method: 'get',
+        });
+    }
 }
 
 export { MaintenanceResource as default };

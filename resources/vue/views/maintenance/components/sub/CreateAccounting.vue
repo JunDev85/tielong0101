@@ -50,9 +50,7 @@
             <tr>
               <th>会計年月</th>
                 <td class="input-td">
-                  <month-picker-input v-model="accounting_year" style="z-index:4000" lang="ja" placeholder="日付を選択してください。"
-                  :format="format"
-                  ></month-picker-input>
+                  <vue-monthly-picker :monthLabels="localeMonth"	inputClass="input" v-model="accounting_year" />
                 </td>
             </tr>
           </tbody>
@@ -66,8 +64,7 @@
             <tr>
               <th>請求金額（税抜）</th>
               <td class="input-td">
-                <!-- <input v-model="unincluding_price"/> -->
-                <currency-input v-model="unincluding_price" :options="{ currency: 'JPY' }"  class="el-input__inner"/>
+                <input type="text" v-model="unincluding_price" class="el-input__inner" @change="calUnin()"/>
               </td>
             </tr>
           </tbody>
@@ -81,8 +78,7 @@
             <tr>
               <th>消費税</th>
               <td class="input-td">
-                <!-- <input v-model="accounting_amount" /> -->
-                <currency-input v-model="accounting_amount" :options="{ currency: 'JPY' }" class="el-input__inner"/>
+                <input v-model="accounting_amount" class="el-input__inner" disabled/>
               </td>
             </tr> 
           </tbody>
@@ -96,8 +92,7 @@
             <tr>
               <th>請求金額（税込）</th>
               <td class="input-td">
-                <!-- <input v-model="including_price"/> -->
-                <currency-input v-model="including_price" :options="{ currency: 'JPY' }"  class="el-input__inner"/>
+                <input v-model="including_price" class="el-input__inner" @change="calIn()"/>
               </td>
             </tr>
           </tbody>
@@ -110,7 +105,23 @@
           <tbody>
             <tr>
               <th>科目</th>
-              <td class="input-td"><input v-model="employee" class="el-input__inner"/></td>
+              <td class="select-td">
+                <el-select
+                  size="small"
+                  v-model="accounting_subjects_id"
+                  placeholder=""
+                  clearable
+                  style="width: 100%"
+                  class="filter-item"
+                >
+                  <el-option
+                    v-for="item in subjects"
+                    :key="item.accounting_subjects_id"
+                    :label="item.name"
+                    :value="item.accounting_subjects_id"
+                  />
+                </el-select>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -127,37 +138,28 @@
       style="width: 100%; margin: auto"
     >
       <el-table-column align="center" prop="accounting_year" label="会計年月">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.accounting_year" placeholder="" />
-        </template>
       </el-table-column>
       <el-table-column align="center" prop="unincluding_price" label="請求金額（税抜）" >
-        <template slot-scope="scope">
-          <!-- <el-input v-model="scope.row.unincluding_price" placeholder=""/> -->
-          <currency-input v-model="scope.row.unincluding_price" :options="{ currency: 'JPY' }" class="el-input__inner"/>
-        </template>
       </el-table-column>
       <el-table-column align="center" prop="accounting_amount" label="消費税">
-        <template slot-scope="scope">
-          <!-- <el-input v-model="scope.row.accounting_amount" placeholder="" /> -->
-           <currency-input v-model="scope.row.accounting_amount" :options="{ currency: 'JPY' }" class="el-input__inner"/>
-        </template>
       </el-table-column>
       <el-table-column align="center" prop="including_price" label="請求金額（税込）">
-        <template slot-scope="scope">
-          <!-- <el-input v-model="scope.row.including_price" placeholder="" /> -->
-          <currency-input v-model="scope.row.including_price" :options="{ currency: 'JPY' }" class="el-input__inner"/>
-        </template>
       </el-table-column>
-      <el-table-column align="center" prop="employee" label="科目">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.employee" placeholder="" />
-        </template>
+      <el-table-column align="center" prop="accounting_subjects_id" label="科目" :formatter="formatterSubject">
       </el-table-column>
       <el-table-column align="center" prop="editor" label="入力者">
-        <template slot-scope="scope">
-          <el-input v-model="scope.row.editor" placeholder="" />
-        </template>
+      </el-table-column>
+      <el-table-column align="center" label="編集/削除" >
+          <template slot-scope="scope">
+            <div style="display: inline-flex; padding 0px; margin: 0px">
+
+                  <el-button size="small" type="primary" @click="editAccountingId(scope.row)"  style="background-color: transparent; padding: 0px; margin: 0px;
+          border: 0px;"><i class="material-icons" style="font-size:30px;color:#1890ff">&#xe254;</i></el-button>
+
+                  <el-button size="small" type="primary" @click="deleteAccountingId(scope.row.accounting_info_id)" style="background-color: transparent; padding: 0px; margin: 0px;
+          border: 0px;"><i class="material-icons" style="font-size:30px;color:red">&#xe92b;</i></el-button>
+            </div>
+          </template>
       </el-table-column>
     </el-table>
 
@@ -167,6 +169,7 @@
 
 <script>
 import MaintenanceResource from '@/api/maintenance';
+import VueMonthlyPicker from 'vue-monthly-picker'
 import CurrencyInput from './CurrencyInput.vue';
 import { MonthPickerInput } from 'vue-month-picker'
 import { Datetime } from 'vue-datetime';
@@ -176,7 +179,7 @@ const resource = new MaintenanceResource();
 
 
 export default {
-  components: { CurrencyInput, MonthPickerInput },
+  components: { VueMonthlyPicker, DateTime },
   props: {
     detail: {
       type: Object,
@@ -187,7 +190,12 @@ export default {
   },
   data() {
     return {
-      accounting_year: new Date(),
+      item: '',
+      subjects: [],
+      subjectsList: [],
+      localeMonth:  ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+      accounting_info_id: this.$route.params['accounting_info_id'],
+      accounting_year: '',
       format: "yyyy/MM/ddd",
       userName: '',
       accounting_amount: '',
@@ -230,7 +238,68 @@ export default {
       this.userName = user.name;
     });
   },
+  mounted() {
+    this.getAccountingSubjects();
+  },
   methods: {
+    formatterSubject(row, column){
+      if(row.accounting_subjects_id == '') return;
+      else {
+        return this.subjectsList[row.accounting_subjects_id];
+      }
+    },
+    getAccountingSubjects(){
+      var data = {
+        business_category_id: this.detail.shop.business_category.business_category_id,
+      }
+      resource.getAccountingSubjects(this.detail.maintenance_id, data).then(res => {
+        this.subjects = res;
+        res.forEach(el => {
+          this.subjectsList[el.accounting_subjects_id] = el.name;
+        });
+      });
+    },
+    calUnin() {
+      // alert(this.unincluding_price)
+      if(this.unincluding_price.includes('¥')){
+        this.accounting_amount = '¥' + Number((this.unincluding_price.split('¥')[1] * 0.1).toFixed(2)) ;
+        this.including_price = '¥' +  Number((this.unincluding_price.split('¥')[1] * 1.1).toFixed(2));
+      } else{
+        this.accounting_amount = '¥' + Number((this.unincluding_price * 0.1).toFixed(2));
+        this.including_price = '¥' +  Number((this.unincluding_price * 1.1).toFixed(2));
+        this.unincluding_price = '¥' + this.unincluding_price;
+      }
+    },
+    calIn(){
+      if(this.including_price.includes('¥')){
+        this.unincluding_price = '¥' + Number((this.including_price.split('¥')[1] / 1.1).toFixed(2));
+        this.accounting_amount = '¥' + Number((this.including_price.split('¥')[1] / 1.1 * 0.1).toFixed(2));
+      } else{
+        this.unincluding_price = '¥' + Number((this.including_price / 1.1).toFixed(2));
+        this.accounting_amount = '¥' + Number((this.including_price / 1.1 * 0.1).toFixed(2));
+        this.including_price = '¥' + this.including_price.split('¥')[0];
+      }
+    },
+    editAccountingId(row){
+      this.$route.params['accounting_info_id'] = row.accounting_info_id;
+      this.accounting_year = row.accounting_year;
+      this.unincluding_price = row.unincluding_price;
+      this.accounting_amount = row.accounting_amount;
+      this.including_price = row.including_price;
+      this.accounting_subjects_id = this.subjectsList[row.accounting_subjects_id];
+    },
+    deleteAccountingId(id) {
+      if(confirm('削除していいですか？')) {
+        var data = {
+          maintenance_id: this.detail.maintenance_id,
+        }      
+        resource.deleteAccountingId(id, data).then(res => {
+          this.detail.accounting_info = res;
+        });
+      } else{
+        return;
+      }
+    },
     handleClose(){
       document.querySelector("#app > div > div.main-container > section > div > div.el-dialog__wrapper.slide-dialog-wrapper > div > div.el-dialog__body > div > div:nth-child(2) > div.el-dialog__wrapper.slide-dialog-wrapper").click();
     },
@@ -240,30 +309,60 @@ export default {
     },
 
     save() {
-    
+      var unincluding_priceF, including_priceF, accounting_amountF, tmp, yearMonth;
+      var currentDate = this.accounting_year;
+      if (String(currentDate).length > 20) {
+        tmp = this.accounting_year.toISOString();
+        yearMonth = DateTime.fromISO(tmp).toFormat('yyyy-MM');
+      }
+      else {
+        yearMonth = currentDate;
+      }
+
+      if(this.unincluding_price.includes('¥')){
+        unincluding_priceF = this.unincluding_price;
+      } else{
+        unincluding_priceF = '¥' + this.unincluding_price;
+      }
+
+      if(this.accounting_amount.includes('¥')){
+        accounting_amountF = this.accounting_amount;
+      } else{
+        accounting_amountF = '¥' + this.accounting_amount;
+      }
+
+      if(this.including_price.includes('¥')){
+        including_priceF = this.including_price;
+      } else{
+        including_priceF = '¥' + this.including_price;
+      }
+
       const insertData = {
-        
+        accounting_info_id: this.$route.params['accounting_info_id'],
         relation_code: this.relation_code,
         relation_name: this.relation_name,
-        unincluding_price: this.unincluding_price,
-        including_price: this.including_price,
-        accounting_year: this.accounting_year.year + '-' + ('0'+this.accounting_year.monthIndex).slice(-2),
+        unincluding_price: unincluding_priceF,
+        accounting_amount: accounting_amountF,
+        including_price: including_priceF,
+        accounting_year: yearMonth,
         editor: this.userName,
-        employee: this.employee,
-        accounting_amount: this.accounting_amount,
+        accounting_subjects_id: this.accounting_subjects_id,
       };
+
       resource.createAccounting(this.detail.maintenance_id, insertData).then(res => {
+        this.$route.params['accounting_info_id'] = 0;
+        this.accounting_year = '';
+        this.unincluding_price = '';
+        this.accounting_amount = '';
+        this.including_price = '';
+        this.accounting_subjects_id = '';
         this.detail.accounting_info = res;
         this.detail.progress_id = this.progressId;
         this.detail.progress = {
           progress_id: this.progressId,
           status: this.progress[this.progressId],
-          // updated_at: this.detail.maintenance_id,
         };
        
-        // this.comment = '';
-        // this.faxedToClient = false;
-        // this.faxedToShop = false;
         this.$emit('create');
       });
     },

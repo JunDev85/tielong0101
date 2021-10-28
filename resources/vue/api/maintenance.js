@@ -135,6 +135,22 @@ class MaintenanceResource extends Resource {
             method: 'get',
         });
     }
+
+    deleteAccountingId(id, data) {
+        return request({
+            url: this.baseUrl + this.uri + '/' + id + '/deleteAccountingId',
+            method: 'post',
+            data: data,
+        });
+    }
+
+    getAccountingSubjects(id, data) {
+        return request({
+            url: this.baseUrl + this.uri + '/' + id + '/getAccountingSubjects',
+            method: 'post',
+            data: data,
+        });
+    }
 }
 
 export { MaintenanceResource as default };

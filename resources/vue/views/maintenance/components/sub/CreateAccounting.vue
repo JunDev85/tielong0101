@@ -287,7 +287,7 @@ export default {
       this.unincluding_price = row.unincluding_price;
       this.accounting_amount = row.accounting_amount;
       this.including_price = row.including_price;
-      this.accounting_subjects_id = this.subjectsList[row.accounting_subjects_id];
+      this.accounting_subjects_id = row.accounting_subjects_id;
       this.subjects_id = this.subjectsList[row.accounting_subjects_id];
     },
     deleteAccountingId(id) {

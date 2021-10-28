@@ -93,10 +93,9 @@
                   style="
                     background-color: transparant;
                     border: 0;
-                    color: blue;
                   "
                 >
-                  <el-button>💬</el-button>
+                  <svg-icon icon-class="comment" />
                 </el-tooltip>
               </td>
             </tr>
@@ -162,7 +161,7 @@
         <tr>
           <th>依頼内容*</th>
           <td>{{ detail.order }}</td>
-          <td rowspan="2" style="padding: 0">
+          <td rowspan="3" style="padding: 0">
             <p class="header-1" style="margin-top: 0; padding: 10px">
               添付ファイル
             </p>
@@ -229,6 +228,10 @@
             </span>
             </div>
           </td>
+        </tr>
+        <tr>
+          <th>初期対応*</th>
+          <td>{{ detail.first_handling }}</td>
         </tr>
         <tr>
           <th>備考</th>

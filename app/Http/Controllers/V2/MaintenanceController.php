@@ -218,6 +218,7 @@ class MaintenanceController extends Controller
             ->update([
                 'relation_code' => $request->input('relation_code'),
                 'relation_name' => $request->input('accounting_amount'),
+                'accounting_year' => $request->input('accounting_year'),
                 'accounting_amount' => $request->input('accounting_amount'),
                 'including_price' => $request->input('including_price'),
                 'unincluding_price' => $request->input('unincluding_price'),

@@ -108,7 +108,7 @@
               <td class="select-td">
                 <el-select
                   size="small"
-                  v-model="accounting_subjects_id"
+                  v-model="subjects_id"
                   placeholder=""
                   clearable
                   style="width: 100%"
@@ -192,6 +192,7 @@ export default {
     return {
       item: '',
       subjects: [],
+      subjects_id: '',
       subjectsList: [],
       localeMonth:  ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
       accounting_info_id: this.$route.params['accounting_info_id'],
@@ -287,6 +288,7 @@ export default {
       this.accounting_amount = row.accounting_amount;
       this.including_price = row.including_price;
       this.accounting_subjects_id = this.subjectsList[row.accounting_subjects_id];
+      this.subjects_id = this.subjectsList[row.accounting_subjects_id];
     },
     deleteAccountingId(id) {
       if(confirm('削除していいですか？')) {
@@ -309,6 +311,9 @@ export default {
     },
 
     save() {
+      var as_id = '';
+      if(typeof this.subjects_id === 'string') as_id = this.accounting_subjects_id;
+      else as_id = this.subjects_id;
       var unincluding_priceF, including_priceF, accounting_amountF, tmp, yearMonth;
       var currentDate = this.accounting_year;
       if (String(currentDate).length > 20) {
@@ -346,7 +351,7 @@ export default {
         including_price: including_priceF,
         accounting_year: yearMonth,
         editor: this.userName,
-        accounting_subjects_id: this.accounting_subjects_id,
+        accounting_subjects_id: as_id,
       };
 
       resource.createAccounting(this.detail.maintenance_id, insertData).then(res => {
@@ -356,6 +361,7 @@ export default {
         this.accounting_amount = '';
         this.including_price = '';
         this.accounting_subjects_id = '';
+        this.subjects_id = '';
         this.detail.accounting_info = res;
         this.detail.progress_id = this.progressId;
         this.detail.progress = {

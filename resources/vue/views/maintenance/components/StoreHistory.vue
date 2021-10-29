@@ -23,7 +23,7 @@
       <el-table-column align="center" class-name="history-td" prop="created_at" label="依頼日" />
       <el-table-column align="center" class-name="history-td" label="完了日">
         <template slot-scope="scope">
-          <span>{{ '' }}</span>
+          <span>{{ scope.row.completed_date }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" class-name="history-td" prop="customer_code" :formatter="formatterName" label="取引先名">

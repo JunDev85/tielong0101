@@ -128,7 +128,7 @@
       </el-col>
     </el-row>
     <div style="text-align: right; padding-bottom: 15px;">
-      <el-button type="primary" size="small" @click="save()">登録</el-button>
+      <el-button type="primary" size="small" @click="save()">{{ button_label }}</el-button>
       <el-button type="default" size="small"  @click="handleClose()">閉じる</el-button>
     </div>    
     <el-table
@@ -190,6 +190,7 @@ export default {
   },
   data() {
     return {
+      button_label: '登録',
       item: '',
       subjects: [],
       subjects_id: '',
@@ -289,6 +290,7 @@ export default {
       this.including_price = row.including_price;
       this.accounting_subjects_id = row.accounting_subjects_id;
       this.subjects_id = this.subjectsList[row.accounting_subjects_id];
+      this.button_label = 'edit';
     },
     deleteAccountingId(id) {
       if(confirm('削除していいですか？')) {
@@ -368,6 +370,7 @@ export default {
           progress_id: this.progressId,
           status: this.progress[this.progressId],
         };
+        this.button_label = '登録';
        
         this.$emit('create');
       });

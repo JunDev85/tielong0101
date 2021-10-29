@@ -228,8 +228,8 @@ export default {
       }
 
       subject = 'subject='
-      if(this.detail.shop.shop_id != '') {
-        subject += '店舗CD: ' + this.detail.shop_id + ' '; 
+      if(this.detail.shop.shop_code != '') {
+        subject += '店舗CD: ' + this.detail.shop.shop_code + ' '; 
       }
       if(this.detail.shop.shop_name) {
         subject += '店舗名: ' + this.detail.shop.shop_name + ' ';

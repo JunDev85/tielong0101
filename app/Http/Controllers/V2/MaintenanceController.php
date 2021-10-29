@@ -131,7 +131,10 @@ class MaintenanceController extends Controller
         $page = $request->input('page', 1);
         $offset = $limit * ($page - 1);
 
-        $qb = Maintenance::with(['shop.business_category', 'orderType', 'progress', 'user'])->whereNotNull('shop_id')->where('sub_category_id', $request->input('sub_category_id'));
+        $qb = Maintenance::with(['shop.business_category', 'orderType', 'progress', 'user'])
+                        ->whereNotNull('shop_id')
+                        ->where('shop_id', $request->input('shop_id'))
+                        ->where('sub_category_id', $request->input('sub_category_id'));
 
         $total = $qb->count();
 
@@ -176,6 +179,8 @@ class MaintenanceController extends Controller
         $maintenance->progress_id = $request->input('progress_id');
         if($request->input('progress_id') == 21) {
             $maintenance->completed_date = $maintenance_progress[0]['updated_at'];
+        } else{
+            $maintenance->completed_date = null;
         }
         if($request->input('deadline_date')) {
             $maintenance->deadline_date = $request->input('deadline_date');

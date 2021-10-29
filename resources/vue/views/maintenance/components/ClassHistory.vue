@@ -63,6 +63,10 @@ export default {
       type: Number,
       default: 0,
     },
+    shopId: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -73,6 +77,7 @@ export default {
         page: 1,
         limit: 8,
         sub_category_id: this.subCategoryId,
+        shop_id: this.shopId,
       },
       customs: [],
     };

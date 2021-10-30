@@ -290,7 +290,7 @@ export default {
       this.including_price = row.including_price;
       this.accounting_subjects_id = row.accounting_subjects_id;
       this.subjects_id = this.subjectsList[row.accounting_subjects_id];
-      this.button_label = 'edit';
+      this.button_label = '更新';
     },
     deleteAccountingId(id) {
       if(confirm('削除していいですか？')) {

@@ -264,21 +264,21 @@ export default {
     calUnin() {
       // alert(this.unincluding_price)
       if(this.unincluding_price.includes('¥')){
-        this.accounting_amount = '¥' + Number((this.unincluding_price.split('¥')[1] * 0.1).toFixed(2)) ;
-        this.including_price = '¥' +  Number((this.unincluding_price.split('¥')[1] * 1.1).toFixed(2));
+        this.accounting_amount = '¥' + Number((this.unincluding_price.split('¥')[1] * 0.1).toFixed(0)) ;
+        this.including_price = '¥' +  Number((this.unincluding_price.split('¥')[1] * 1.1).toFixed(0));
       } else{
-        this.accounting_amount = '¥' + Number((this.unincluding_price * 0.1).toFixed(2));
-        this.including_price = '¥' +  Number((this.unincluding_price * 1.1).toFixed(2));
+        this.accounting_amount = '¥' + Number((this.unincluding_price * 0.1).toFixed(0));
+        this.including_price = '¥' +  Number((this.unincluding_price * 1.1).toFixed(0));
         this.unincluding_price = '¥' + this.unincluding_price;
       }
     },
     calIn(){
       if(this.including_price.includes('¥')){
-        this.unincluding_price = '¥' + Number((this.including_price.split('¥')[1] / 1.1).toFixed(2));
-        this.accounting_amount = '¥' + Number((this.including_price.split('¥')[1] / 1.1 * 0.1).toFixed(2));
+        this.unincluding_price = '¥' + Number((this.including_price.split('¥')[1] / 1.1).toFixed(0));
+        this.accounting_amount = '¥' + Number((this.including_price.split('¥')[1] / 1.1 * 0.1).toFixed(0));
       } else{
-        this.unincluding_price = '¥' + Number((this.including_price / 1.1).toFixed(2));
-        this.accounting_amount = '¥' + Number((this.including_price / 1.1 * 0.1).toFixed(2));
+        this.unincluding_price = '¥' + Number((this.including_price / 1.1).toFixed(0));
+        this.accounting_amount = '¥' + Number((this.including_price / 1.1 * 0.1).toFixed(0));
         this.including_price = '¥' + this.including_price.split('¥')[0];
       }
     },

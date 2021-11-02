@@ -247,6 +247,15 @@ class MaintenanceController extends Controller
         return response($accounting_info);
     }
 
+    public function deleteAccountingId(Request $request, $accounting_info_id)
+    {
+        Accounting_info::where('accounting_info_id', $accounting_info_id)
+        ->delete();
+
+        $accounting_info = Accounting_info::where('maintenance_id', $request->input('maintenance_id'))->get();
+        return response($accounting_info);
+    } 
+
     public function uploadReport(Request $request, $maintenance_id)
     {
         $validator = Validator::make(

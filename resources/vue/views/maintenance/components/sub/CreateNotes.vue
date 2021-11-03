@@ -77,12 +77,9 @@ export default {
   },
   methods: {
     handleClose() {
-      document
-        .querySelector(
-          '#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(10) > div > div.el-dialog__body > div > div.el-dialog__wrapper'
-        )
-        .classList.add('close-css');
+      document.querySelector("#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(9) > div > div.el-dialog__body > div > div.el-dialog__wrapper").click();
     },
+    
     saveNotes() {
       const input_data = {
         note1: this.note1,

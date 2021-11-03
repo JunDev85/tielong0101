@@ -21,15 +21,48 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
     <link rel="manifest" href="/favicon/manifest.json">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 </head>
 <body>
+    <div class="logout-class">
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="material-icons">&#xe879;</i>
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+    </div>
+
     <div id="app">
         <app></app>
     </div>
 
+    <style>
+        .logout-class {
+            position: fixed;
+            z-index: 10;
+            top: 20px;
+            right: 50px;
+            color: red;
+            display: none;
+        }
+
+        .material-icons {
+            font-size: 32px;
+        }
+
+        @media screen and (max-width: 520px) {
+            .logout-class {
+                right: 10px;
+                display: none;
+            }
+
+            .material-icons {
+                font-size: 18px;
+            }
+        }
+    </style>
     <!-- <script src=/static/tinymce4.7.5/tinymce.min.js></script> -->
     <script src="{{ asset('assets/js/vendor.js') }}"></script>
     <script src="{{ asset('assets/js/manifest.js') }}"></script>

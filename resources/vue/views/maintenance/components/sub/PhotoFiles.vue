@@ -27,7 +27,7 @@
       </el-col>
     </el-row>
 
-    <el-dialog :visible.sync="photoviewVisible" width="45%" :modal="false">
+    <el-dialog :visible.sync="photoviewVisible" :width="viewDialogWidth" :modal="false">
       <span slot="title"
         ><i class="el-icon-info"></i> {{ phototitleData }}
       </span>
@@ -55,21 +55,30 @@ export default {
       },
     },
   },
+
   data() {
     return {
       photoviewVisible: false,
       photoSrc: '',
       phototitleData: '',
+      viewDialogWidth: '45%',
     };
   },
-  methods: {
-    photoFileView(file_path, file_name) {
-      /* local public file */
 
-      // var split_path = file_path.split('/');
-      // var fileName = split_path[split_path.length - 1];
-      // var actionUrl =  './maintenance/photofile/' + fileName;
-      // this.phototitleData = fileName;
+  mounted() {
+    if(this.isMobile()) {
+      this.viewDialogWidth = '100%';
+    }    
+  },
+
+  methods: {
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
+    },
+
+    photoFileView(file_path, file_name) {
 
       /* s3 file get */
       var actionUrl = './zensho-mainte/photofile/' + this.detail.maintenance_id + '/' + file_name;

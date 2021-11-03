@@ -14,31 +14,17 @@
             <svg-icon icon-class="warning" /> 災害（地震・台風・大雨など）
           </span>
         </li>
-
+        <li>
+          <span class="el-tag el-tag--medium el-tag--light" style="color: #DE38B8; background-color: #FCE5F7; border: 1px solid #E4B4D9" >
+            <el-checkbox v-model="query.eventCheck" @change="handleFilter()" style="color: #DE38B8; background-color: #FCE5F7;"><i style="color: #DE38B8; padding-right: 5px" class="fa">&#xf017;</i><span  style="color: #DE38B8;">対応期限切れ</span>  </el-checkbox>
+            <span class="badge">  
+              <span id="eventcheckCount">{{ eventcheckCount }}</span>  
+            </span>
+          </span>
+        </li>
         <li class="pull-right">
-          <el-select v-model="query.progress_id" :multiple="true" placeholder="ステータス" clearable style="width: 350px" class="filter-item" v-on:change="handleFilter()">
-            <el-option label="すべて選択" :value="0" />
-            <el-option label="BM承認待" :value="1" />
-            <el-option label="BM承認" :value="2" />
-            <el-option label="BM差戻し" :value="3" />
-            <el-option label="BM却下" :value="4" />
-            <el-option label="BM保留" :value="5" />
-            <el-option label="受付前" :value="6" />
-            <!-- <el-option label="本部承認" :value="1" /> -->
-            <el-option label="本部差戻し" :value="7" />
-            <el-option label="本部見送り" :value="8" />
-            <el-option label="依頼前" :value="9" />
-            <el-option label="依頼済" :value="10" />
-            <el-option label="見積待ち" :value="11" />
-            <el-option label="入荷待ち" :value="13" />
-            <el-option label="DM承認待ち" :value="14" />
-            <el-option label="稟議中" :value="15" />
-            <el-option label="見積発注済み" :value="16" />
-            <el-option label="訪問待ち" :value="18" />
-            <el-option label="報告待ち" :value="19" />
-            <el-option label="店完了" :value="20" />
-            <el-option label="取完了" :value="21" />
-          </el-select>
+          <ElSelectAll v-model="query.progress_id" clearable filterable multiple collapse-tags :options="mdoptionsList" placeholder="ステータス" class="filter-item"  v-on:change="handleFilter()"/>
+
           <el-select v-model="query.business_category_id" placeholder="業態"  filterable
    clearable style="width: 100px" class="filter-item" @change="getShops" v-on:change="handleFilter()">
             <el-option label="全業態" :value="0" />
@@ -101,7 +87,7 @@
             <el-option label="JF" :value="57" />
             <el-option label="ME" :value="58" />
           </el-select>
-          <el-select v-model="query.shop_id" placeholder="店舗" clearable style="width: 100px" class="filter-item">
+          <el-select v-model="query.shop_id" placeholder="店舗" filterable clearable style="width: 100px" class="filter-item">
             <el-option label="全店舗" :value="0" />
             <el-option v-for="item in shops" :key="item.shop_id" :label="item.shop_name" :value="item.shop_id" />
           </el-select>
@@ -135,21 +121,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="申請者">
-        <template slot-scope="scope">
-          <span>{{ scope.row.user.name }}</span>
-        </template>
-      </el-table-column>
-
       <el-table-column align="center" label="依頼区分">
         <template slot-scope="scope">
           <span>{{ scope.row.order_type.type }}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" label="設備名">
-        <template slot-scope="scope">
-          <span>{{ scope.row.equipment }}</span>
         </template>
       </el-table-column>
 
@@ -159,9 +133,14 @@
         </template>
       </el-table-column>
 
+      <el-table-column align="center" label="対応期限">
+        <template slot-scope="scope">
+          <span>{{ scope.row.deadline_date }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="完了日">
         <template slot-scope="scope">
-          <!-- <span>{{ scope.row.updated_at }}</span> -->
           <span>{{ scope.row.completed_date }}</span>
         </template>
       </el-table-column>
@@ -172,13 +151,6 @@
         </template>
       </el-table-column>
 
-      <!-- <el-table-column align="center" label="アクション">
-        <template slot-scope="scope">
-          <router-link :to="'/maintenance/detail/'+scope.row.maintenance_id" class="link-type">
-            <el-button size="small" type="primary">変更</el-button>
-          </router-link>
-        </template>
-      </el-table-column> -->
     </el-table>
     <div style="text-align:center;">
       <pagination v-show="total>0" :total="total" :page.sync="query.page" :limit.sync="query.limit" @pagination="getList" />
@@ -186,16 +158,25 @@
   </div>
 </template>
 <style>
+.badge {
+  position: absolute;
+  top: 73px;
+  padding-top: 2px!important;
+  line-height: 20px;
+  padding: 0px 6px;
+  border-radius: 50%;
+  background-color: #C91313;
+  color: white;
+}
 
 .custom-highlight-row{
-  background-color: pink!important;
+  background-color: #f7b8f0!important;
 }
 
 .custom-danger-row{
   background-color: #fff8e6!important;
   content: "\e7a1";
 }
-
 
 .custom-warning-row{
   background-color: #ffdbdb!important;
@@ -208,19 +189,23 @@ import MaintenanceResource from '@/api/maintenance';
 import ShopResource from '@/api/shop';
 import waves from '@/directive/waves'; // Waves directive
 
+import ElSelectAll from './selectAll.vue';
+
 const resource = new MaintenanceResource();
 const shopResource = new ShopResource();
 
 export default {
   name: 'MaintenanceList',
-  components: { Pagination },
+  components: { Pagination, ElSelectAll },
   directives: { waves },
   data() {
     return {
+      eventcheckCount: 0,
       list: null,
       total: 0,
       loading: true,
       query: {
+        eventCheck: '',
         page: 1,
         limit: 15,
         keyword: '',
@@ -230,37 +215,68 @@ export default {
         shop_id: null,
       },
       shops: [],
+      mdoptionsList: [
+        { label: 'BM承認待ち', value: 1 },
+        { label: 'BM承認', value: 2  },
+        { label: 'BM差戻し', value: 3  },
+        { label: 'BM却下', value: 4  },
+        { label: 'BM保留', value: 5  },
+        { label: '本部受付前', value: 6  },
+        { label: '本部差戻し', value: 7  },
+        { label: '本部見送り', value: 8  },
+        { label: '依頼確定', value: 9  },
+        { label: '依頼済', value: 10  },
+        { label: '見積待ち', value: 11  },
+        { label: '見積精査中', value: 12  },
+        { label: '入荷待ち', value: 13  },
+        { label: 'DM承認待ち', value: 14  },
+        { label: '稟議中', value: 15  },
+        { label: '見積発注済み', value: 16  },
+        { label: '日程調整中', value: 17  },
+        { label: '訪問待ち', value: 18  },
+        { label: '報告待ち', value: 19  },
+        { label: '店完了', value: 20  },
+        { label: '取完了', value: 21  },
+        { label: '問合せ中', value: 22  },
+      ],
     };
   },
   computed: {
     
   },
   created() {
-    this.getList();
-
-    // var totoalTxt = document.getElementsByClassName('el-pagination__total')[0].textContent;
-    // var split_tt = totoalTxt.split(' ');
-    // totoalTxt = '全' + split_tt[1] + '件';
-    
+    this.getList();   
+    this.eventcheckCountfunc();
   },
   mounted() {
 
   },
   methods: {
-    
+    eventcheckCountfunc(){
+      resource.eventcheckCountfunc().then(res => {
+        this.eventcheckCount = res;
+      });
+    },
+
    tableRowClassName({row, rowIndex}) {
-    //  console.log(row.order_type_id);
-       if(row.is_emergency > 0) {
-         return 'custom-warning-row';
-       } 
-       if(row.is_disaster > 0) {
-         return 'custom-danger-row';
-       }
+      if(row.is_emergency > 0) {
+        return 'custom-warning-row';
+      } 
+      if(row.is_disaster > 0) {
+        return 'custom-danger-row';
+      }
+
+    var createDate = row.created_at;
+
+    if(createDate.split(' ')[0] > row.deadline_date) {
+      return 'custom-highlight-row';
+    }
+
     return;
   },
 
     async getList() {
-          
+
       const { limit, page } = this.query;
       this.loading = true;
       const { data, meta } = await resource.list(this.query);
@@ -273,6 +289,11 @@ export default {
           } 
           if(element.is_disaster > 0) {
              element.maintenance_code = '<i style="color: #ffba00; padding-right: 5px" class="fa">&#xf071;</i>' + element.maintenance_code; 
+          }
+
+          var createDate = element.created_at;
+          if(createDate.split(' ')[0] > element.deadline_date) {
+             element.maintenance_code = '<i style="color: #DE38B8; padding-right: 5px" class="fa">&#xf017;</i>' + element.maintenance_code;
           }
       });
       this.total = meta.total;
@@ -335,6 +356,17 @@ export default {
     &:hover, &:focus {
       color: #999;
     }
+  }
+}
+
+@media screen and (max-width: 737px) {
+  .app-main .app-container .filter-container .list-inline li {
+    margin: 0px!important;
+    padding-bottom: 10px;
+  }
+  
+  .el-select .filter-item .el-select--medium {
+    width: 385px;
   }
 }
 </style>

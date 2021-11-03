@@ -84,7 +84,7 @@
     </el-row>
     <el-row :gutter="0">
       <el-col :span="10">
-        <table class="detail-table">
+        <table class="detail-table"  style="display: none">
           <tbody>
             <tr>
               <th>区分コード</th>
@@ -113,7 +113,7 @@
         </table>
       </el-col>
       <el-col :span="10">
-        <table class="detail-table">
+        <table class="detail-table" style="display: none">
           <tbody>
             <tr>
               <th>区分</th>
@@ -202,7 +202,7 @@
         <th style="width: 111px">取引先コード</th>
         <th>取引先名</th>
         <th>取引先名(カナ)</th>
-        <th style="width: 104px">区分コード</th>
+        <!-- <th style="width: 104px">区分</th> -->
         <th style="width: 125px">TEL</th>
         <th style="width: 125px">FAX</th>
       </tr>
@@ -215,43 +215,12 @@
           <td align="center">{{ citem.customer_code }}</td>
           <td align="center">{{ citem.customer_name }}</td>
           <td align="center">{{ citem.customer_alias }}</td>
-          <td align="center">{{ citem.customergroup_code }}</td>
+          <!-- <td align="center">{{ citem.customergroup }}</td> -->
           <td align="center">{{ citem.TEL }}</td>
           <td align="center">{{ citem.FAX }}</td>
         </tr>
       </template>
     </table>
-    <!-- <el-table
-      :data="custom"
-      :show-header="true"
-    
-      border
-      style="width: 100%; margin: auto: display: none;"
-    >
-      <el-table-column align="center" prop="id" label="NO"></el-table-column>
-      <el-table-column align="center" prop="customer_code" label="取引先コード"></el-table-column>
-      <el-table-column align="center" prop="customer_name" label="取引先名"></el-table-column>
-      <el-table-column align="center" prop="customer_alias" label="取引先名(カナ)"></el-table-column>
-      <el-table-column align="center" prop="customergroup_code" label="区分コード"></el-table-column>
-      <el-table-column align="center" prop="customergroup" label="区分"></el-table-column>
-      <el-table-column align="center" prop="TEL" label="TEL"></el-table-column>
-      <el-table-column align="center" prop="FAX" label="FAX"></el-table-column>
-      <el-table-column align="center" label="FAX">
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-        <el-button
-          size="mini"
-          type="danger"
-          @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
-      </template>
-      </el-table-column>
-    </el-table> -->
-    <!-- {{this.custom}} -->
-    <!-- <template v-for="item in this.custom">
-
-    </template> -->
   </div>
 </template>
 <style>
@@ -354,7 +323,8 @@ export default {
     close_createComponent() {
       this.custom = '';
       this.selectedRow = '';
-      document.querySelector('#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(11) > div > div.el-dialog__body > div > div.el-dialog__wrapper').classList.add('close-css');
+
+     document.getElementById('createcustomerVisible').click();
     },
     depart_name() {
       if (!this.customergroup_code) {
@@ -442,5 +412,28 @@ export default {
   },
 };
 </script>
+
+<style>
+@keyframes dialog-ffade-in {
+  0% {
+    transform: translate3d(-100%, 0, 0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+@keyframes dialog-ffade-out {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(100%, 0, 0);
+    opacity: 0;
+  }
+}
+</style>
 <style lang="scss" scoped>
 </style>

@@ -29,13 +29,13 @@
 
     <el-dialog
       :visible.sync="quotationpdfviewVisible"
-      width="45%"
+      :width="viewDialogWidth"
       :modal="false"
     >
       <span slot="title" ><i class="el-icon-info"></i> {{ quotationtitleData }} </span>
-        <template v-if="quotationpdfSrc">
-          <pdf :src="quotationpdfSrc"></pdf>
-        </template>
+        <template  v-if="quotationpdfSrc">
+          <iframe style="width: 100%; max-height: 50rem; min-height: 30rem" :src="quotationpdfSrc"></iframe>
+        </template>        
       <span slot="footer" class="dialog-footer">
         <el-button @click="quotationpdfviewVisible = false">閉じる</el-button>
       </span>
@@ -47,11 +47,12 @@
 <script>
 import MaintenanceResource from '@/api/maintenance';
 import pdf from 'vue-pdf'
+import VuePdfApp from "vue-pdf-app"
 
 const resource = new MaintenanceResource();
 export default {
   components: {
-    pdf
+    pdf, VuePdfApp,
   },
   props: {
     detail: {
@@ -66,17 +67,25 @@ export default {
       quotationpdfviewVisible: false,
       quotationpdfSrc: '',
       quotationtitleData: '',
+      viewDialogWidth: '45%',
     };
     
   },
+
+  mounted() {
+    if(this.isMobile()) {
+      this.viewDialogWidth = '100%';
+    }    
+  },
+
   methods: {
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
+    },
 
     quotationFileView(file_name, fiel_path) {
-      // var split_path = file_path.split('/');
-      // var fileName = split_path[split_path.length - 1];
-      // var actionUrl =  './maintenance/quotationfile/' + fileName;
-      // this.quotationtitleData = fileName;
-      // console.log(actionUrl);
 
       /* s3 file get */
       var actionUrl = './zensho-mainte/quotationfile/' + this.detail.maintenance_id + '/' + file_name;

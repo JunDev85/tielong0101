@@ -16,20 +16,13 @@
 
     <el-dialog
       :visible.sync="reportpdfviewVisible"
-      width="45%"
+      :width="viewDialogWidth"
       :modal="false"
     >
       <span slot="title" ><i class="el-icon-info"></i> {{ reporttitleData }} </span>
             <template  v-if="reportpdfSrc">
-              <pdf :src="reportpdfSrc" />
-            </template>
-          <!-- <embed
-            v-if="reportpdfSrc"
-                  type="video/webm"
-                  :src="reportpdfSrc"
-                  width="100%"
-                  style="max-height: 50rem; min-height: 30rem"
-            /> -->
+              <iframe style="width: 100%; max-height: 50rem; min-height: 30rem;" :src="reportpdfSrc"></iframe>
+            </template>          
       <span slot="footer" class="dialog-footer">
         <el-button @click="reportpdfviewVisible = false">閉じる</el-button>
       </span>
@@ -39,10 +32,11 @@
 
 <script>
 import pdf from 'vue-pdf'
+import VuePdfApp from "vue-pdf-app"
 
 export default {
   components: {
-    pdf
+    pdf, VuePdfApp,
   },
   props: {
     detail: {
@@ -57,15 +51,26 @@ export default {
       reportpdfviewVisible: false,
       reportpdfSrc: '',
       reporttitleData: '',
+      viewDialogWidth: '45%',
     };
     
   },
+
+  mounted() {
+    if(this.isMobile()) {
+      this.viewDialogWidth = '100%';
+    }    
+  },
+
   methods: {
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
+    },
 
     reportFileView(file_name, file_path) {
-      // var split_path = file_path.split('/');
-      // var fileName = split_path[split_path.length - 1];
-      // var actionUrl =  './maintenance/reportfile/' + fileName;
+
 
       /* s3 file get */
       var actionUrl = './zensho-mainte/reportfile/' + this.detail.maintenance_id + '/' + file_name;

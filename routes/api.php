@@ -82,19 +82,31 @@ Route::group(['namespace' => 'V2'], function () {
 
     Route::any('v2/maintenance/class_history', 'MaintenanceController@classHistory'); // メンテナンス一覧
     Route::any('v2/maintenance/shop_history', 'MaintenanceController@shopHistory'); // メンテナンス一覧
+    Route::get('v2/maintenance/customsList', 'MaintenanceController@customsList'); 
+
+    Route::get('v2/maintenance/eventcheckCountfunc', 'MaintenanceController@eventcheckCountfunc'); 
 
     Route::post('v2/maintenance/{mantenance_id}/progress/create', 'MaintenanceController@createProgress');
 
     Route::post('v2/maintenance/{mantenance_id}/quotation/create', 'MaintenanceController@createQuotation');//tie9.5 add
+
     Route::post('v2/maintenance/{mantenance_id}/accounting/create', 'MaintenanceController@createAccounting');
+    Route::post('v2/maintenance/{mantenance_id}/deleteAccountingId', 'MaintenanceController@deleteAccountingId');
+    Route::post('v2/maintenance/{mantenance_id}/getAccountingSubjects', 'MaintenanceController@getAccountingSubjects');
+
+
     Route::post('v2/maintenance/{mantenance_id}/selectreason', 'MaintenanceController@selectreason');
     
 
     Route::post('v2/maintenance/upload/report/{mantenance_id}', 'MaintenanceController@uploadReport');
     Route::post('v2/maintenance/upload/photo/{mantenance_id}', 'MaintenanceController@uploadPhoto');
+    Route::post('v2/maintenance/uploadQuotation/photo/{mantenance_id}', 'MaintenanceController@uploadQuotationPhoto');
     Route::post('v2/maintenance/upload/quotation/{mantenance_id}', 'MaintenanceController@uploadQuotation');
 
+    Route::get('v2/maintenance/{mantenance_id}/middle_bigconnect', 'MaintenanceController@middle_bigconnect');
     Route::get('v2/maintenance/{mantenance_id}/big_middleconnect', 'MaintenanceController@big_middleconnect');
+    Route::post('v2/maintenance/{mantenance_id}/deleteQuotationId', 'MaintenanceController@deleteQuotationId');
+
     Route::get('v2/maintenance/{mantenance_id}/depart_name', 'MaintenanceController@depart_name');
     
     Route::post('v2/maintenance/{mantenance_id}/update_customerid', 'MaintenanceController@update_customerid');

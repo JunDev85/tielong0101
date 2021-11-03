@@ -8,7 +8,13 @@
           <span>{{ scope.row.is_emergency == 1 ? '緊急' : '' }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" class-name="history-td" prop="maintenance_code" label="メンテナンスNo" />
+      <el-table-column align="center" class-name="history-td" label="メンテナンスNo" >
+        <template slot-scope="scope">
+          <router-link :to="'/maintenance/detail/'+scope.row.maintenance_id" class="link-type" target= '_blank'>
+            <span v-html="scope.row.maintenance_code"></span>
+          </router-link>
+        </template>
+      </el-table-column>
       <el-table-column align="center" class-name="history-td" label="ステータス">
         <template slot-scope="scope">
           <span>{{ scope.row.progress.status }}</span>
@@ -17,13 +23,10 @@
       <el-table-column align="center" class-name="history-td" prop="created_at" label="依頼日" />
       <el-table-column align="center" class-name="history-td" label="完了日">
         <template slot-scope="scope">
-          <span>{{ '' }}</span>
+          <span>{{ scope.row.completed_date }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" class-name="history-td" label="取引先名">
-        <template slot-scope="scope">
-          <span>{{ '' }}</span>
-        </template>
+      <el-table-column align="center" class-name="history-td" prop="customer_code" :formatter="formatterName" label="取引先名">
       </el-table-column>
       <el-table-column align="center" class-name="history-td" label="依頼内容">
         <template slot-scope="scope">
@@ -60,6 +63,10 @@ export default {
       type: Number,
       default: 0,
     },
+    shopId: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -70,13 +77,28 @@ export default {
         page: 1,
         limit: 8,
         sub_category_id: this.subCategoryId,
+        shop_id: this.shopId,
       },
+      customs: [],
     };
   },
   created() {
+    this.customsList();
     this.getList();
   },
   methods: {
+    formatterName(row, column) {
+      // console.log(row.customer_code);
+      if(row.customer_code == '') return;
+      else {
+        return this.customs[row.customer_code];
+      }
+    },
+    async customsList() {
+      resource.customsList().then((res) => {
+        this.customs = res;
+      });
+    },  
     async getList() {
       const { limit, page } = this.query;
       this.loading = true;

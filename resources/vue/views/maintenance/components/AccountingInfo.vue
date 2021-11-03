@@ -13,21 +13,18 @@
         align="center"
         prop="unincluding_price"
         label="請求金額（税抜）"
-        :formatter="formatterCurrency"
       />
       <el-table-column
         align="center"
         prop="accounting_amount"
         label="消費税"
-        :formatter="formatterCurrency1"
       />
       <el-table-column
         align="center"
         prop="including_price"
         label="請求金額（税込）"
-        :formatter="formatterCurrency2"
       />
-      <el-table-column align="center" prop="employee" label="科目" />
+      <el-table-column align="center" prop="accounting_subjects_id" label="科目" :formatter="formatterSubject"/>
       <el-table-column
         align="center"
         prop="editor"
@@ -47,7 +44,7 @@
     <el-dialog
       title="【会計情報】"
       :visible.sync="createAccounting"
-      width="43%"
+      :width="editdialogWidth"
       custom-class="slide-dialog"
       top="0px"
       :modal="false"
@@ -87,7 +84,15 @@ export default {
   },
   data() {
     return {
+      item: '',
+      subjects: [],   
+      subjectsList: {
+        1: '科目１',
+        2: '科目2',
+        3: '科目3',
+      },
       createAccounting: false,
+      editdialogWidth: '43%',
       tableData: [
         { v1: '2020/05/15', v2: '', v3: '', v4: '', v5: '', v6: '' },
         { v1: '2020/05/15', v2: '', v3: '', v4: '', v5: '', v6: '' },
@@ -97,22 +102,24 @@ export default {
     };
   },
 
+  mounted() {
+    if(this.isMobile()) {
+      this.editdialogWidth = '100%';
+    }
+  },
+
   methods: {
+    formatterSubject(row, column){
+      return this.subjectsList[row.accounting_subjects_id]
+    },
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
+    },
+
     createAccountingChange(){
       this.createAccounting = true;
-      document.querySelector("#app > div > div.main-container > section > div > div.el-dialog__wrapper.slide-dialog-wrapper > div > div.el-dialog__body > div > div:nth-child(2) > div.el-dialog__wrapper.slide-dialog-wrapper").classList.remove('close-css');
-    },
-    formatterCurrency(row, column) {
-      if (row.unincluding_price == null) return;
-      return '¥' + row.unincluding_price;
-    },
-    formatterCurrency1(row, column) {
-      if (row.accounting_amount == null) return;
-      return '¥' + row.accounting_amount;
-    },
-    formatterCurrency2(row, column) {
-      if (row.including_price == null) return;
-      return '¥' + row.including_price;
     },
   },
 };

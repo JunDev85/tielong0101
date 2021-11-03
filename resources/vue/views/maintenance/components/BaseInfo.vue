@@ -10,7 +10,7 @@
           <tbody>
             <tr>
               <th>店舗CD</th>
-              <td style="text-align:center">{{ detail.shop.shop_id }}</td>
+              <td style="text-align:center">{{ detail.shop.shop_code }}</td>
               <td style="text-align:center">{{ detail.shop.business_category.business_category }}</td>
             </tr>
             <tr>
@@ -37,7 +37,7 @@
             </tr>
             <tr>
               <th>店舗担当</th>
-              <td>{{ userName }}</td>
+              <td>{{ detail.user.name  }}</td>
             </tr>
           </tbody>
         </table>
@@ -45,44 +45,6 @@
     </el-row>
     <el-divider />
     <h3>担当者メール</h3>
-    <!-- <table class="detail-table">
-      <tr>
-        <td></td>
-        <td>名称</td>
-        <td>担当者</td>
-        <td>メール宛先</td>
-        <td>メールCC</td>
-      </tr>
-      <tr>
-        <td>営業部</td>
-        <th>{{ detail.mail_data11[0]['department_name'] ? detail.mail_data11[0]['department_name'] : '' }}</th>
-        <td>{{ detail.mail_data1[0]['name'] }}</td>
-        <td prop="to">
-          <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.to" />
-          </template>
-        </td>
-        <td prop="cc">
-          <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.cc" />
-          </template>
-        </td>
-      </tr>
-      <tr>
-        <th>{{ detail.mail_data11[0]['department_name'] ? detail.mail_data11[0]['department_name'] : '' }}</th>
-        <td>{{ detail.mail_data1[0]['name'] }}</td>
-        <td prop="to">
-          <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.to" />
-          </template>
-        </td>
-        <td prop="cc">
-          <template slot-scope="scope">
-            <el-checkbox v-model="scope.row.cc" />
-          </template>
-        </td>
-      </tr>
-    </table> -->
     <el-table :data="tableData" :show-header="true" border style="width: 100%; margin:auto;">
       <el-table-column align="center" prop="title" class-name="header-1" label="" />
       <el-table-column align="center" prop="name" label="名称" />
@@ -109,65 +71,57 @@
       <tbody>
         <tr>
           <th>特記①</th>
-          <td>{{ detail.shop.note1 }}</td>
+          <td style="white-space: pre-wrap;">{{ detail.shop.note1 }}</td>
         </tr>
         <tr>
           <th>特記②</th>
-          <td>{{ detail.shop.note2 }}</td>
+          <td style="white-space: pre-wrap;">{{ detail.shop.note2 }}</td>
         </tr>
       </tbody>
     </table>
     <div style="text-align:right;margin-top:10px;">
       <el-button type="primary" size="small" @click="createNotesShow()">特記編集</el-button>
     </div>
-    <!-- <transition name="notetransition">
-      <template v-if="createNotesVisible"> -->
-    <el-dialog
-      title="【特記情報 編集】"
-      :visible.sync="createNotesVisible"
-      width="43%"
-      custom-class="slide-dialog"
-      top="0px"
-      :modal="false"
-    >
+    <button v-on:click="show = !show" id="createnotesVisible" style="display: none">
+      ToggleCreateNotes
+    </button>
 
-        <CreateNotes :detail="detail"/>
+    <transition name="slideNotes">
+      <template v-if="show">
+        <el-dialog
+          title="【特記情報 編集】"
+          :visible.sync="show"
+          :width="notesDialogWidth"
+          custom-class="slide-dialog"
+          top="0px"
+          :modal="false"
+        >
 
-    </el-dialog>
-      <!-- </template>
-    </transition> -->
+          <CreateNotes :detail="detail"/>
+
+        </el-dialog>
+      </template>
+    </transition>
   </div>
 </template>
 <style>
-@keyframes dialog-fade-in {
-  0% {
-    transform: translate3d(0, 100%, 0);
-    opacity: 0;
+  .slideNotes-enter-active {
+    transition: 0.5s;
   }
-  100% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
+
+  .slideNotes-leave-active {
+    transition: 0.8s;
   }
-}
-@keyframes dialog-fade-out {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
+
+  .slideNotes-enter {
+    transform: translate(100%, 0);
   }
-  100% {
-    transform: translate3d(0, -100%, 0);
-    opacity: 0;
+
+  .slideNotes-leave-to {
+    transform: translate( 100%, 0);
   }
-}
 </style>
-<style>
-.notetransition-enter-active, .notetransition-leave-active {
-  transition: opacity .5s;
-}
-.notetransition-enter, .notetransition-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-</style>
+
 <script>
 import MaintenanceResource from '@/api/maintenance';
 
@@ -196,6 +150,9 @@ export default {
   },
   data() {
     return {
+      show: false,
+
+      notesDialogWidth: '40%',
       mail_data: 'mailto:' + this.detail.user.email,
       userName: '', 
       createNotesVisible: false,
@@ -203,7 +160,6 @@ export default {
  
 
       tableData: [
-        { title: '地域会社', name: '-', manager: '-', to: false, cc: false },
         { title: '営業部', name: this.detail.department_names[0]['department_name'], manager: this.detail.departmentUserNEs[0]['name'], email: this.detail.departmentUserNEs[0]['email'], to: false, cc: false },
         { title: 'ディストリクト', name: this.detail.district_names[0]['district_name'], manager: this.detail.districtUserNEs[0]['name'], email: this.detail.districtUserNEs[0]['email'], to: false, cc: false },
         { title: 'ブロック', name: this.detail.block_names[0]['block_name'], manager: this.detail.blockUsersNEs[0]['name'], email: this.detail.blockUsersNEs[0]['email'], to: false, cc: false },
@@ -216,11 +172,24 @@ export default {
       this.userName = user.name;
     });
   },
+
+  mounted() {
+    if(this.isMobile()) {
+      this.notesDialogWidth = '100%';
+    }    
+  },
+
   methods: {
-    createNotesShow() {
-      this.createNotesVisible = true;
-      document.querySelector('#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(10) > div > div.el-dialog__body > div > div.el-dialog__wrapper').classList.remove('close-css');
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
     },
+
+    createNotesShow() {
+      document.getElementById('createnotesVisible').click();
+    },
+
     getsend() {
       var emails_ge = "", emails_cc = "", emails = "", subject="";
       var flag = 0, flag_re = 0, first_check = 0;
@@ -252,51 +221,38 @@ export default {
           }   
         }       
       });
-      if(emails_ge == "") {
-        emails = emails_cc;
-      } else if((emails_cc != "")){
+      if((emails_cc != "")){
         emails = emails_ge + "?" + emails_cc;
       } else if(emails_ge != ""){
         emails = emails_ge; 
       }
 
-      subject = '&subject='
-      if(this.detail.shop.shop_id != '') {
-        subject += '店舗CD: ' + this.detail.shop_id + ' '; 
+      subject = 'subject='
+      if(this.detail.shop.shop_code != '') {
+        subject += '店舗CD: ' + this.detail.shop.shop_code + ' '; 
       }
       if(this.detail.shop.shop_name) {
-        subject += '店舗名: ' + this.detail.shop_name + ' ';
+        subject += '店舗名: ' + this.detail.shop.shop_name + ' ';
       }
       if(this.detail.sub_category) {
         subject += '中分類: ' + this.detail.sub_category.sub_category_name + ' ';
       }
-      var mailhref = "mailto:" + emails + subject;
+      //shop_name and sub category name undefined remain
+      var mailhref = "mailto:";
+
+      if(emails_ge == "" && emails_cc == "") {
+        mailhref += "?" + subject;
+      } else {
+        if(emails_cc == "") {
+          mailhref += emails + "?" + subject;
+        } else {
+          mailhref += emails + "&" + subject;
+        }
+      }
+
       // console.log(mailhref);
       window.location.href = mailhref;
     },
   },
 };
 </script>
-
-<style>
-@keyframes dialog-fade-in {
-  0% {
-    transform: translate3d(0, 100%, 0);
-    opacity: 0;
-  }
-  100% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  }
-}
-@keyframes dialog-fade-out {
-  0% {
-    transform: translate3d(0, 0, 0);
-    opacity: 1;
-  } 
-  100% {
-    transform: translate3d(0, -100%, 0);
-    opacity: 0;
-  }
-}
-</style>

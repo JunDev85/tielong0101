@@ -37,10 +37,7 @@
         >見積書({{ this.$route.params['q_cnt'] }})</el-button
       >
       <el-button type="info" size="mini" @click="photoFilesVisible = true"
-        >写真({{ this.$route.params['p_cnt'] }})</el-button
-      >
-      <el-button type="info" size="mini" @click="reportFilesVisible = true"
-        >報告書({{ this.$route.params['r_cnt'] }})</el-button
+        >写真({{ this.$route.params['qp_cnt'] }})</el-button
       >
     </div>
 
@@ -48,7 +45,7 @@
       title="【見積書ファイルリスト】"
       :visible.sync="quotationFilesVisible"
       :modal="false"
-      width="700px"
+      :width="filedialogWidth"
     >
       <quotation-files :detail="detail" />
       <span slot="footer" class="dialog-footer">
@@ -57,32 +54,20 @@
     </el-dialog>
     <el-dialog
       :modal="false"
-      title="【写真リスト】"
+      title="【見積書写真リスト】"
       :visible.sync="photoFilesVisible"
-      width="700px"
+      :width="filedialogWidth"
     >
-      <photo-files :detail="detail" />
+      <qphoto-files :detail="detail" />
       <span slot="footer" class="dialog-footer">
         <el-button @click="photoFilesVisible = false">閉じる</el-button>
       </span>
     </el-dialog>
 
     <el-dialog
-      title="【報告書ファイルリスト】"
-      :visible.sync="reportFilesVisible"
-      width="700px"
-      :modal="false"
-    >
-      <report-files :detail="detail" />
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="reportFilesVisible = false">閉じる</el-button>
-      </span>
-    </el-dialog>
-
-    <el-dialog
       title="見積情報 登録"
       :visible.sync="editVisible"
-      width="43%"
+      :width="editdialogWidth"
       custom-class="slide-dialog"
       top="0px"
       :modal="false"
@@ -94,7 +79,7 @@
 
 <script>
 import QuotationFiles from './sub/QuotationFiles.vue';
-import PhotoFiles from './sub/PhotoFiles.vue';
+import QphotoFiles from './sub/QphotoFiles.vue';
 import ReportFiles from './sub/ReportFiles.vue';
 import ProgressEdit from './sub/ProgressEdit.vue';
 
@@ -106,7 +91,7 @@ import Resource from '@/api/resource';
 export default {
   components: {
     QuotationFiles,
-    PhotoFiles,
+    QphotoFiles,
     ProgressEdit,
     ReportFiles,
     QuotationInfo,
@@ -131,6 +116,8 @@ export default {
       q_cnt: 0,
       r_cnt: 0,
       p_cnt: 0,
+      filedialogWidth: '700px',
+      editdialogWidth: '43%',
     };
   },
   created() {
@@ -165,14 +152,21 @@ export default {
       el.closest('.el-dialog__wrapper').classList.add('slide-dialog-wrapper');
     });
 
+    if(this.isMobile()) {
+      this.filedialogWidth = '100%';
+      this.editdialogWidth = '100%';
+    }
+
   },
   methods: {
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
+    },
+
     editVisibleChange() {
       this.editVisible = true;
-      var div_create = document.querySelector("#app > div > div.main-container > section > div > div.el-dialog__wrapper.slide-dialog-wrapper > div > div.el-dialog__body > div > div:nth-child(1) > div.el-dialog__wrapper.slide-dialog-wrapper");
-      if(div_create) {
-        div_create.classList.remove('close-css');
-      }
     },
     formatterProgress(row, column) {
       return this.progress[row.progress_id] ?? '';

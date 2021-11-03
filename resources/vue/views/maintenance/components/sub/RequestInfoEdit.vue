@@ -15,7 +15,7 @@
             <tr>
               <th>大分類*</th>
               <td class="select-td">
-                <el-select v-model="big_ca" size="small" placeholder="" clearable style="width: 100%" class="filter-item" v-on:change="big_middleconnect()">
+                <el-select v-model="big_ca" size="small" placeholder="" filterable clearable style="width: 100%" class="filter-item" v-on:change="big_middleconnect()">
                   <el-option v-for="item in categories" :key="item.category_id" :label="item.category_name" :value="item.category_id" />
                 </el-select>
               </td>
@@ -23,7 +23,7 @@
             <tr>
               <th>中分類*</th>
               <td class="select-td">
-                <el-select v-model="mid_ca" size="small" placeholder="" clearable style="width: 100%" class="filter-item" >
+                <el-select v-model="mid_ca" size="small" placeholder="" filterable clearable style="width: 100%" class="filter-item" v-on:change="middle_bigconnect()">
                   <el-option v-for="item in subCategories" :key="item.sub_category_id" :label="item.sub_category_name" :value="item.sub_category_id" />
                 </el-select>
               </td>
@@ -36,9 +36,6 @@
               <th>依頼区分*</th>
               <td>
                 {{detail.order_type.type}}
-                <!-- <el-select v-model="data.order_type_id" size="small" placeholder="" clearable style="width: 100%" class="filter-item">
-                  <el-option v-for="item in orderTypes" :key="item.order_type_id" :label="item.type" :value="item.order_type_id" />
-                </el-select> -->
               </td>
             </tr>
           </tbody>
@@ -77,6 +74,12 @@
           <th>依頼内容*</th>
           <td class="input-td">
             <textarea v-model="data_re.order" readonly rows="10" />
+          </td>
+        </tr>
+        <tr>
+          <th>初期対応*</th>
+          <td class="input-td">
+            <textarea v-model="data_re.first_handling" readonly rows="10" />
           </td>
         </tr>
         <tr>
@@ -193,20 +196,28 @@
         </tr>
       </tbody>
     </table>
-    <el-dialog
-      title="【取引先検索】"
-      :visible.sync="createCustomerVisible"
-      width="43%"
-      custom-class="slide-dialog"
-      top="0px"
-      :modal="false"
-    >
-      <create-customer :detail="detail" :selectedRow="custom"/>
-      <span slot="footer" class="dialog-footer">
-        <!-- <el-button type="primary" @click="createAccounting = false">登録</el-button> -->
-        <!-- <el-button @click="createCustomerVisible = false">閉じる</el-button> -->
-      </span> 
-    </el-dialog>    
+
+      <button v-on:click="show = !show" id="createcustomerVisible" style="display: none">
+        ToggleCreateCustomer
+      </button>
+
+    <transition name="slide">
+
+      <template v-if="show">
+        <el-dialog
+          title="【取引先検索】"
+          :visible.sync="show"
+          :width="createdialogWidth"
+          custom-class="slide-dialog"
+          top="0px"
+          :modal="false"
+        >
+          <create-customer :detail="detail" :selectedRow="custom"/>
+
+          <span slot="footer" class="dialog-footer"></span> 
+        </el-dialog>
+      </template>
+   </transition>  
   </div>
 </template>
 
@@ -229,12 +240,14 @@ export default {
   },
   data() {
     return {
+      createdialogWidth: '45%',
+      show: false,
       row_id:'',
       custom: null,
       custom_data: [],
       data_re: null,
-      big_ca: '',
-      mid_ca: '',
+      big_ca: this.detail.category_id,
+      mid_ca: this.detail.sub_category_id,
       createCustomerVisible: false,
       categories: [],
       subCategories: [],
@@ -257,30 +270,54 @@ export default {
   created() {
     this.data_re = JSON.parse(JSON.stringify(this.detail));
     this.getList();
-    // this.$route.params.set('name', 'john');
   },
+
+  mounted() {
+    if(this.isMobile()) {
+      this.createdialogWidth = '100%';
+    }
+  },
+  
   methods: {
+    isMobile() {
+      var check = true;
+      if(document.querySelector("body").clientWidth > 737) check = false;
+      return check;
+    },
+  
     createCustomerVisibleSetting() {
       this.$route.params['custom_tableData'] = '';
       this.$route.params['selectedRow'] = 0;      
       this.createCustomerVisible = true;
-      document.querySelector('#app > div > div.main-container > section > div > div.el-row > div:nth-child(1) > div > div.el-card__body > div:nth-child(11) > div > div.el-dialog__body > div > div.el-dialog__wrapper').classList.remove('close-css');
+      document.getElementById('createcustomerVisible').click();   
     },
+
+
     big_middleconnect () {
-      // console.log(this.data_re.category_id);
-            if(!this.big_ca) {
-              this.mid_ca = '';
-              return;
-            }
-            // alert(this.data.category_id);
-            // alert("ddd");
-            maintenanceResource.big_middleconnect(this.big_ca).then(res =>{
-                this.subCategories = res;
-                this.mid_ca = '';
-                // console.log(res.category_id);
-                // this.data_re.sub_category_id = res[0].sub_category_id;
-            }); 
+      var big_caVariable;
+      if(!this.big_ca) {
+        this.mid_ca = '';
+        big_caVariable = 0;
+      } else {
+        big_caVariable = this.big_ca;
+      }
+      maintenanceResource.big_middleconnect(big_caVariable).then(res =>{
+          this.subCategories = res;
+          this.mid_ca = '';
+      }); 
     },
+
+    middle_bigconnect () {
+      if(!this.mid_ca) {
+        this.big_ca = '';
+        return;
+      }
+      maintenanceResource.middle_bigconnect(this.mid_ca).then(res =>{
+          // this.categories = res;
+          this.big_ca = res[0].category_id;
+      }); 
+    },
+
     async getList() {
       const categoryResource = new Resource('categories');
       const subCategoryResource = new Resource('sub_categories');
@@ -303,5 +340,20 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style>
+  .slide-enter-active {
+    transition: 0.5s;
+  }
+
+  .slide-leave-active {
+    transition: 0.8s;
+  }
+
+  .slide-enter {
+    transform: translate(100%, 0);
+  }
+
+  .slide-leave-to {
+    transform: translate( 100%, 0);
+  }
 </style>
